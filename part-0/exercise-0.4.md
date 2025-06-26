@@ -7,6 +7,9 @@ sequenceDiagram
 
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
     activate server
+
+    Note right of browser: The browser sends a POST request to the server to create a new note with form data in the body
+
     server-->>browser: URL redirect "/notes"
     deactivate server
 
