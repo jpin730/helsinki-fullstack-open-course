@@ -1,0 +1,2 @@
+cd part-1/exercise-1.1-1.5
+npx lint-staged
