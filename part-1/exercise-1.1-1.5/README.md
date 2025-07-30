@@ -3,7 +3,7 @@
 This app was created using Vite and React (JavaScript) through the command:
 
 ```bash
-npm create vite@latest introdemo -- --template react
+npm create vite@latest exercise-1.1-1.5 -- --template react
 ```
 
 ## How to Run the App
