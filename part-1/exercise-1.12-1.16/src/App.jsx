@@ -17,6 +17,7 @@ const App = () => {
 
   return (
     <main>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <button onClick={() => setVotes(votes.map((vote, i) => (i === selected ? vote + 1 : vote)))}>
         Vote
@@ -24,6 +25,9 @@ const App = () => {
       <button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))}>
         Next Anecdote
       </button>
+      <hr />
+      <h2>Anecdotes with most votes</h2>
+      <p>{anecdotes[votes.indexOf(Math.max(...votes))]}</p>
     </main>
   )
 }
