@@ -1,9 +1,9 @@
-# Exercise 1.12 - 1.16
+# Exercise 1.12 - 1.14
 
 This app was created using Vite and React (JavaScript) through the command:
 
 ```bash
-npm create vite@latest exercise-1.12-1.16 -- --template react
+npm create vite@latest exercise-1.12-1.14 -- --template react
 ```
 
 ## How to Run the App
