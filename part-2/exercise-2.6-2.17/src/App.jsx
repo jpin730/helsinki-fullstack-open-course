@@ -2,14 +2,8 @@ import { useState } from 'react'
 import { Filter } from './components/filter'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
+import { INITIAL_PERSONS } from './consts/initial-persons'
 import { filterPersons } from './utils/filter-persons'
-
-const INITIAL_PERSONS = {
-  ['Arto Hellas']: { name: 'Arto Hellas', number: '040-123456' },
-  ['Ada Lovelace']: { name: 'Ada Lovelace', number: '39-44-5323523' },
-  ['Dan Abramov']: { name: 'Dan Abramov', number: '12-43-234345' },
-  ['Mary Poppendieck']: { name: 'Mary Poppendieck', number: '39-23-6423122' },
-}
 
 const App = () => {
   const [persons, setPersons] = useState(INITIAL_PERSONS)
