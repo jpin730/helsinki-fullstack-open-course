@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Filter } from './components/filter'
 import { PersonForm } from './components/PersonForm'
+import { Persons } from './components/Persons'
 
 const INITIAL_PERSONS = {
   ['Arto Hellas']: { name: 'Arto Hellas', number: '040-123456' },
@@ -42,22 +43,7 @@ const App = () => {
 
       <hr />
       <h2>Numbers</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredPersons.map((person) => (
-            <tr key={person.name}>
-              <td>{person.name}</td>
-              <td>{person.number}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Persons persons={filteredPersons} />
     </div>
   )
 }
