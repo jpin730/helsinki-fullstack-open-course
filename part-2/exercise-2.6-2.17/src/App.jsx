@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Filter } from './components/filter'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
+import { filterPersons } from './utils/filter-persons'
 
 const INITIAL_PERSONS = {
   ['Arto Hellas']: { name: 'Arto Hellas', number: '040-123456' },
@@ -14,9 +15,7 @@ const App = () => {
   const [persons, setPersons] = useState(INITIAL_PERSONS)
   const [filter, setFilter] = useState('')
 
-  const filteredPersons = Object.values(persons).filter(({ name }) =>
-    name.toLowerCase().includes(filter.trim().toLowerCase()),
-  )
+  const filteredPersons = filterPersons(persons, filter)
 
   const onChangeFilter = (value) => setFilter(value)
 
