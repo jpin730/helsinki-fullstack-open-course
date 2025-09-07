@@ -10,6 +10,13 @@ const App = () => {
 
     if (trimmedName === '') return
 
+    const nameExists = trimmedName in persons
+
+    if (nameExists) {
+      alert(`${trimmedName} is already added to phone book`)
+      return
+    }
+
     const nameObject = { [trimmedName]: trimmedName }
     setPersons({ ...persons, ...nameObject })
     setNewName('')
