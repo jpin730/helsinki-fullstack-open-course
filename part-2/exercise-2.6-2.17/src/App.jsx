@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Filter } from './components/filter'
+import { PersonForm } from './components/PersonForm'
 
 const INITIAL_PERSONS = {
   ['Arto Hellas']: { name: 'Arto Hellas', number: '040-123456' },
@@ -11,60 +12,34 @@ const INITIAL_PERSONS = {
 const App = () => {
   const [persons, setPersons] = useState(INITIAL_PERSONS)
   const [filter, setFilter] = useState('')
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
 
-  const filteredPersons = Object.values(persons).filter((person) =>
-    person.name.toLowerCase().includes(filter.trim().toLowerCase()),
+  const filteredPersons = Object.values(persons).filter(({ name }) =>
+    name.toLowerCase().includes(filter.trim().toLowerCase()),
   )
 
   const onChangeFilter = (value) => setFilter(value)
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const trimmedName = newName.trim()
-    const trimmedNumber = newNumber.trim()
-
-    if (trimmedName === '' || trimmedNumber === '') {
-      alert('Both name and number are required')
-      return
-    }
-
-    const nameExists = trimmedName in persons
+  const addPerson = ({ name, number }) => {
+    const nameExists = name in persons
 
     if (nameExists) {
-      alert(`${trimmedName} is already added to phone book`)
-      return
+      alert(`${name} is already added to phone book`)
+      return false
     }
 
-    const nameObject = { [trimmedName]: { name: trimmedName, number: trimmedNumber } }
-    setPersons({ ...persons, ...nameObject })
-    setNewName('')
-    setNewNumber('')
+    setPersons({ ...persons, [name]: { name, number } })
+    return true
   }
 
   return (
     <div>
       <h1>Phone Book</h1>
-      <Filter filter={filter} onChange={onChangeFilter} />
+      <Filter onChange={onChangeFilter} />
 
       <hr />
       <h2>Add a New</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input id="name" value={newName} onChange={({ target }) => setNewName(target.value)} />
+      <PersonForm onSubmit={addPerson} />
 
-        <label htmlFor="number">Number</label>
-        <input
-          id="number"
-          value={newNumber}
-          onChange={({ target }) => setNewNumber(target.value)}
-        />
-
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
       <hr />
       <h2>Numbers</h2>
       <table>
