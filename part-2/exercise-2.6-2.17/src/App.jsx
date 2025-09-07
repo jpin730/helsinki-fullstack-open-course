@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Filter } from './components/filter'
 
 const INITIAL_PERSONS = {
   ['Arto Hellas']: { name: 'Arto Hellas', number: '040-123456' },
@@ -16,6 +17,8 @@ const App = () => {
   const filteredPersons = Object.values(persons).filter((person) =>
     person.name.toLowerCase().includes(filter.trim().toLowerCase()),
   )
+
+  const onChangeFilter = (value) => setFilter(value)
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -43,10 +46,8 @@ const App = () => {
   return (
     <div>
       <h1>Phone Book</h1>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <label htmlFor="filter">Filter shown with</label>
-        <input id="filter" value={filter} onChange={({ target }) => setFilter(target.value)} />
-      </form>
+      <Filter filter={filter} onChange={onChangeFilter} />
+
       <hr />
       <h2>Add a New</h2>
       <form onSubmit={handleSubmit}>
