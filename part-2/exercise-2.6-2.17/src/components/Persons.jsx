@@ -8,10 +8,10 @@ export const Persons = ({ persons }) => {
         </tr>
       </thead>
       <tbody>
-        {persons.map((person) => (
-          <tr key={person.name}>
-            <td>{person.name}</td>
-            <td>{person.number}</td>
+        {persons.map(({ name, number }) => (
+          <tr key={name}>
+            <td>{name}</td>
+            <td>{number}</td>
           </tr>
         ))}
       </tbody>
