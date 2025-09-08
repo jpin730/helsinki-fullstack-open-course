@@ -1,13 +1,25 @@
-import { useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { Filter } from './components/filter'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
-import { INITIAL_PERSONS } from './consts/initial-persons'
+import { API_BASE_URL } from './consts/api-base-url'
 import { filterPersons } from './utils/filter-persons'
 
 const App = () => {
-  const [persons, setPersons] = useState(INITIAL_PERSONS)
+  const [persons, setPersons] = useState({})
   const [filter, setFilter] = useState('')
+
+  useEffect(() => {
+    const url = `${API_BASE_URL}/persons`
+    axios.get(url).then(({ data }) => {
+      const personsByName = data.reduce((acc, person) => {
+        acc[person.name] = person
+        return acc
+      }, {})
+      setPersons(personsByName)
+    })
+  }, [])
 
   const filteredPersons = filterPersons(persons, filter)
 
