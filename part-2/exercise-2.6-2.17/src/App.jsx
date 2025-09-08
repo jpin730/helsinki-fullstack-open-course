@@ -23,7 +23,7 @@ const App = () => {
 
   const onChangeFilter = (value) => setFilter(value)
 
-  const addPerson = ({ name, number }) => {
+  const addPerson = async ({ name, number }) => {
     const nameExists = name in persons
 
     if (nameExists) {
@@ -31,8 +31,14 @@ const App = () => {
       return false
     }
 
-    setPersons({ ...persons, [name]: { name, number } })
-    return true
+    try {
+      const newPerson = await personsService.create({ name, number })
+      setPersons({ ...persons, [newPerson.name]: newPerson })
+      return true
+    } catch (error) {
+      console.error('Error adding person:', error)
+      return false
+    }
   }
 
   return (

@@ -14,12 +14,12 @@ export const PersonForm = ({ onSubmit }) => {
       return
     }
 
-    const added = onSubmit({ name: trimmedName, number: trimmedNumber })
-
-    if (added) {
-      setNewName('')
-      setNewNumber('')
-    }
+    onSubmit({ name: trimmedName, number: trimmedNumber }).then((success) => {
+      if (success) {
+        setNewName('')
+        setNewNumber('')
+      }
+    })
   }
 
   return (
