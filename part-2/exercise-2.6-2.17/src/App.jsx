@@ -41,6 +41,19 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id) => {
+    personsService
+      .remove(id)
+      .then((removedPerson) => {
+        const updatedPersons = structuredClone(persons)
+        delete updatedPersons[removedPerson.name]
+        setPersons(updatedPersons)
+      })
+      .catch((error) => {
+        console.error('Error deleting person:', error)
+      })
+  }
+
   return (
     <div>
       <h1>Phone Book</h1>
@@ -52,7 +65,7 @@ const App = () => {
 
       <hr />
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} deletePerson={deletePerson} />
     </div>
   )
 }
