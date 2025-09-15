@@ -3,6 +3,7 @@ import { Filter } from './components/filter'
 import { Notification } from './components/Notification'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
+import { ERROR_MESSAGE_PREFIX } from './consts/error-message-prefix'
 import { MESSAGE_TIMEOUT } from './consts/message-timeout'
 import personsService from './services/persons'
 import { filterPersons } from './utils/filter-persons'
@@ -56,6 +57,11 @@ const App = () => {
       clearMessage()
       return true
     } catch (error) {
+      if (error.response && error.response.status === 404) {
+        const errorMessage = `${ERROR_MESSAGE_PREFIX}Information of ${name} has already been removed from server`
+        setMessage(errorMessage)
+        clearMessage()
+      }
       console.error('Error updating person:', error)
       return false
     }
