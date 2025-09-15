@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Filter } from './components/filter'
+import { Notification } from './components/Notification'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
+import { MESSAGE_TIMEOUT } from './consts/message-timeout'
 import personsService from './services/persons'
 import { filterPersons } from './utils/filter-persons'
 
 const App = () => {
   const [persons, setPersons] = useState({})
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
+  const timeoutRef = useRef(null)
 
   useEffect(() => {
     personsService.getAll().then((data) => {
@@ -19,9 +23,26 @@ const App = () => {
     })
   }, [])
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
   const filteredPersons = filterPersons(persons, filter)
 
   const onChangeFilter = (value) => setFilter(value)
+
+  const clearMessage = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => {
+      setMessage(null)
+    }, MESSAGE_TIMEOUT)
+  }
 
   const updatePerson = async ({ id, name, number }) => {
     const confirmMessage = `${name} is already added to phone book, replace the old number with a new one?`
@@ -31,6 +52,8 @@ const App = () => {
     try {
       const updatedPerson = await personsService.update(id, { name, number })
       setPersons({ ...persons, [updatedPerson.name]: updatedPerson })
+      setMessage(`Updated ${updatedPerson.name}'s number`)
+      clearMessage()
       return true
     } catch (error) {
       console.error('Error updating person:', error)
@@ -48,6 +71,8 @@ const App = () => {
     try {
       const newPerson = await personsService.create({ name, number })
       setPersons({ ...persons, [newPerson.name]: newPerson })
+      setMessage(`Added ${newPerson.name}`)
+      clearMessage()
       return true
     } catch (error) {
       console.error('Error adding person:', error)
@@ -71,6 +96,9 @@ const App = () => {
   return (
     <div>
       <h1>Phone Book</h1>
+
+      <Notification message={message} />
+
       <Filter onChange={onChangeFilter} />
 
       <hr />
