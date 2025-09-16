@@ -42,6 +42,7 @@ const App = () => {
     }
     timeoutRef.current = setTimeout(() => {
       setMessage(null)
+      timeoutRef.current = null
     }, MESSAGE_TIMEOUT)
   }
 
