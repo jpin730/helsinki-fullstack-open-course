@@ -1,5 +1,19 @@
+import Search from './components/search'
+
 const App = () => {
-  return <h1>Hello world!</h1>
+  const handleSearch = (searchTerm) => {
+    console.log('Searching for:', searchTerm)
+  }
+  return (
+    <main>
+      <h1>Rest Countries</h1>
+
+      <label htmlFor="search">
+        Find countries
+        <Search id="search" onSearch={handleSearch} />
+      </label>
+    </main>
+  )
 }
 
 export default App
