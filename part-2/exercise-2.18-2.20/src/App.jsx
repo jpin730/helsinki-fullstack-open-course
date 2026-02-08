@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import CountriesResult from './components/CountriesResult'
 import SearchInput from './components/SearchInput'
 import countriesService from './services/countries'
 
 const App = () => {
-  const countriesRef = useRef([])
+  const [countries, setCountries] = useState([])
   const [filteredCountries, setFilteredCountries] = useState([])
 
   useEffect(() => {
-    countriesService.getAll().then((data) => (countriesRef.current = data))
+    countriesService.getAll().then((data) => setCountries(data))
   }, [])
 
   const handleSearch = (searchTerm) => {
@@ -17,7 +17,7 @@ const App = () => {
       return
     }
 
-    const filtered = countriesRef.current.filter((country) =>
+    const filtered = countries.filter((country) =>
       country.name.common.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     setFilteredCountries(filtered)
