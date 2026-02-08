@@ -16,11 +16,10 @@ Install the dependencies:
 npm install
 ```
 
-Start the backend server:
+Setup the OpenWeather API key:
 
-```bash
-npm run server
-```
+1. Copy the `.env.template` file to `.env`.
+2. Replace the placeholder value for `VITE_OPEN_WEATHER_API_KEY` with your actual OpenWeather API key.
 
 Start the frontend development server:
 
