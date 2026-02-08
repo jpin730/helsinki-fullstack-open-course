@@ -23,6 +23,10 @@ const App = () => {
     setFilteredCountries(filtered)
   }
 
+  const handleCountrySelect = (country) => {
+    setFilteredCountries([country])
+  }
+
   return (
     <main>
       <h1>Rest Countries</h1>
@@ -36,7 +40,7 @@ const App = () => {
 
       <p>{filteredCountries.length}</p>
 
-      <CountriesResult countries={filteredCountries} />
+      <CountriesResult countries={filteredCountries} onSelect={handleCountrySelect} />
     </main>
   )
 }
