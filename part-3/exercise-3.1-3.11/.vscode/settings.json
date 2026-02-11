@@ -1,9 +1,9 @@
 {
-    "standard.autoFixOnSave": true,
     "rest-client.environmentVariables": {
         "$shared": {},
         "local": {
             "baseUrl": "http://localhost:3001"
         }
-    }
+    },
+    "standard.autoFixOnSave": true
 }
