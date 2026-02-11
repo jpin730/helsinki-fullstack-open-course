@@ -1,28 +1,8 @@
 const express = require('express')
-const app = express()
+const HTTP_STATUS = require('./consts/http-status')
+const PERSONS = require('./consts/persons')
 
-const PERSONS = [
-  {
-    id: '1',
-    name: 'Arto Hellas',
-    number: '040-123456'
-  },
-  {
-    id: '2',
-    name: 'Ada Lovelace',
-    number: '39-44-5323523'
-  },
-  {
-    id: '3',
-    name: 'Dan Abramov',
-    number: '12-43-234345'
-  },
-  {
-    id: '4',
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122'
-  }
-]
+const app = express()
 
 app.get('/api', (_, response) => {
   response.send('Hello  World!')
@@ -44,10 +24,22 @@ app.get('/api/persons/:id', (request, response) => {
   const person = PERSONS.find((p) => p.id === id)
 
   if (person == null) {
-    return response.status(404).end()
+    return response.status(HTTP_STATUS.NOT_FOUND).end()
   }
 
   response.json(person)
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const personIndex = PERSONS.findIndex((p) => p.id === id)
+
+  if (personIndex === -1) {
+    return response.status(HTTP_STATUS.NOT_FOUND).end()
+  }
+
+  PERSONS.splice(personIndex, 1)
+  response.status(HTTP_STATUS.NO_CONTENT).end()
 })
 
 const PORT = 3001
