@@ -1,4 +1,5 @@
 const express = require('express')
+
 const HTTP_STATUS = require('./consts/http-status')
 const PERSONS = require('./consts/persons')
 
@@ -28,6 +29,27 @@ app.get('/api/persons/:id', (request, response) => {
   }
 
   response.json(person)
+})
+
+// create person with random id
+app.post('/api/persons', express.json(), (request, response) => {
+  const { name, number } = request.body
+
+  if (name == null || number == null) {
+    return response.status().json({ error: 'name or number is missing' })
+  }
+
+  const nameExists = PERSONS.some((p) => p.name === name)
+
+  if (nameExists) {
+    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'name must be unique' })
+  }
+
+  const id = (Math.random() * 1000000).toFixed(0)
+  const newPerson = { id, name, number }
+  PERSONS.push(newPerson)
+
+  response.status(HTTP_STATUS.CREATED).json(newPerson)
 })
 
 app.delete('/api/persons/:id', (request, response) => {

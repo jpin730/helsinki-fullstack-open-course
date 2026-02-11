@@ -1,0 +1,7 @@
+POST {{baseUrl}}/api/persons
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "number": "123-4567890"
+}
