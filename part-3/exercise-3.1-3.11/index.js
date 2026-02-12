@@ -5,6 +5,8 @@ const PERSONS = require('./consts/persons')
 
 const app = express()
 
+app.use(express.json())
+
 app.get('/api', (_, response) => {
   response.send('Hello  World!')
 })
@@ -32,7 +34,7 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 // create person with random id
-app.post('/api/persons', express.json(), (request, response) => {
+app.post('/api/persons', (request, response) => {
   const { name, number } = request.body
 
   if (name == null || number == null) {
