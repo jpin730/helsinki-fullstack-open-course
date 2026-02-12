@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 
 const HTTP_STATUS = require('./consts/http-status')
 const PERSONS = require('./consts/persons')
@@ -6,6 +7,7 @@ const PERSONS = require('./consts/persons')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/api', (_, response) => {
   response.send('Hello  World!')
