@@ -7,7 +7,14 @@ const PERSONS = require('./consts/persons')
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+morgan.token('body', (req) =>
+  req.body && Object.keys(req.body).length > 0 ? JSON.stringify(req.body) : ''
+)
+
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+)
 
 app.get('/api', (_, response) => {
   response.send('Hello  World!')
@@ -35,7 +42,6 @@ app.get('/api/persons/:id', (request, response) => {
   response.json(person)
 })
 
-// create person with random id
 app.post('/api/persons', (request, response) => {
   const { name, number } = request.body
 
@@ -46,7 +52,9 @@ app.post('/api/persons', (request, response) => {
   const nameExists = PERSONS.some((p) => p.name === name)
 
   if (nameExists) {
-    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'name must be unique' })
+    return response
+      .status(HTTP_STATUS.BAD_REQUEST)
+      .json({ error: 'name must be unique' })
   }
 
   const id = (Math.random() * 1000000).toFixed(0)
