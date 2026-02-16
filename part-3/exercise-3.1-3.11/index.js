@@ -22,6 +22,8 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(express.static('public'))
+
 morgan.token('body', (req) =>
   req.body && Object.keys(req.body).length > 0 ? JSON.stringify(req.body) : ''
 )
