@@ -1,1 +1,22 @@
-console.log('Hello world!')
+const args = process.argv
+
+if (args.length < 3) {
+  console.log('Please provide the password as an argument: node index.js <password>')
+  process.exit(1)
+}
+
+const password = args[2]
+const personName = args[3]
+const personNumber = args[4]
+
+if (personName && !personNumber) {
+  console.log('Please provide the number as an argument: node index.js <password> <name> <number>')
+  process.exit(1)
+}
+
+if (personName && personNumber) {
+  console.log(`added ${personName} number ${personNumber} to phonebook`)
+  process.exit(0)
+}
+
+console.log(password)
