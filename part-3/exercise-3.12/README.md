@@ -37,7 +37,7 @@ The application works from the command line and supports two operations:
 Pass three command-line arguments: password, name, and phone number.
 
 ```bash
-npm start yourpassword Anna 040-1234556
+node index.js yourpassword Anna 040-1234556
 ```
 
 Output:
@@ -49,7 +49,7 @@ added Anna number 040-1234556 to phonebook
 **Note:** If the name contains whitespace characters, it must be enclosed in quotes:
 
 ```bash
-npm start yourpassword "Arto Vihavainen" 045-1232456
+node index.js yourpassword "Arto Vihavainen" 045-1232456
 ```
 
 ### Listing all entries in the phonebook
@@ -57,7 +57,7 @@ npm start yourpassword "Arto Vihavainen" 045-1232456
 Pass only the password as a command-line argument:
 
 ```bash
-npm start yourpassword
+node index.js yourpassword
 ```
 
 Output:
