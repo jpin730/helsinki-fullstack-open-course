@@ -38,6 +38,8 @@ HTTP requests are available in the `requests/` folder. Install the [REST Client]
 
 The base URL is configured in [.vscode/settings.json](.vscode/settings.json) for the `local` environment.
 
+Production environment requests are available by selecting the `production` environment in the REST Client.
+
 ## Deployment
 
 The app is deployed at: <https://helsinki-fullstack-open-course.onrender.com>
