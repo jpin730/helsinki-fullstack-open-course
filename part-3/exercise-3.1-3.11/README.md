@@ -37,3 +37,9 @@ If you want to debug the application using Visual Studio Code, just press F5 or 
 HTTP requests are available in the `requests/` folder. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) VS Code extension to use them.
 
 The base URL is configured in [.vscode/settings.json](.vscode/settings.json) for the `local` environment.
+
+## Deployment
+
+The app is deployed at: <https://helsinki-fullstack-open-course.onrender.com>
+
+> NOTE: Before running the app, make sure to run the `npm run build:ui` script to copy the built frontend files from the previous part of the course.
