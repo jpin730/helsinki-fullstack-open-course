@@ -48,5 +48,11 @@ if (personName && personNumber) {
     mongoose.connection.close()
   })
 } else {
-  console.log(password)
+  Person.find({}).then(result => {
+    console.log('phonebook:')
+    result.forEach(person => {
+      console.log(`${person.name} ${person.number}`)
+    })
+    mongoose.connection.close()
+  })
 }
