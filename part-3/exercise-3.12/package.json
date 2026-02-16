@@ -11,5 +11,8 @@
   },
   "devDependencies": {
     "standard": "^17.1.2"
+  },
+  "dependencies": {
+    "mongoose": "^9.2.1"
   }
 }

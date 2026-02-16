@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 process.loadEnvFile()
 let mongoDbUri = process.env.MONGODB_URI
 
@@ -18,16 +20,33 @@ const personName = args[3]
 const personNumber = args[4]
 
 mongoDbUri = mongoDbUri.replace('<db_password>', password)
-console.log(mongoDbUri)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String
+})
+
+const Person = mongoose.model('Person', personSchema)
 
 if (personName && !personNumber) {
   console.log('Please provide the number as an argument: node index.js <password> <name> <number>')
   process.exit(1)
 }
 
-if (personName && personNumber) {
-  console.log(`added ${personName} number ${personNumber} to phonebook`)
-  process.exit(0)
-}
+mongoose.set('strictQuery', false)
 
-console.log(password)
+mongoose.connect(mongoDbUri, { family: 4 })
+
+if (personName && personNumber) {
+  const person = new Person({
+    name: personName,
+    number: personNumber
+  })
+
+  person.save().then(() => {
+    console.log(`added ${personName} number ${personNumber} to phonebook`)
+    mongoose.connection.close()
+  })
+} else {
+  console.log(password)
+}
