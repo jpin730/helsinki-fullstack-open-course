@@ -1,8 +1,12 @@
 const express = require('express')
 const morgan = require('morgan')
 
+process.loadEnvFile()
+
 const HTTP_STATUS = require('./consts/http-status')
 const PERSONS = require('./consts/persons')
+
+const Person = require('./models/person')
 
 const app = express()
 
@@ -13,12 +17,12 @@ app.use(express.json())
 //   res.header('Access-Control-Allow-Origin', '*')
 //   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
 //   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  
+
 //   // Handle preflight requests
 //   if (req.method === 'OPTIONS') {
 //     return res.sendStatus(200)
 //   }
-  
+
 //   next()
 // })
 
@@ -44,7 +48,9 @@ app.get('/api/info', (_, response) => {
 })
 
 app.get('/api/persons', (_, response) => {
-  response.json(PERSONS)
+  Person.find({}).then((persons) => {
+    response.json(persons)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
