@@ -71,19 +71,23 @@ app.post('/api/persons', (request, response) => {
     return response.status().json({ error: 'name or number is missing' })
   }
 
-  const nameExists = PERSONS.some((p) => p.name === name)
+  // TODO: Check if name already exists in the database
+  // const nameExists = PERSONS.some((p) => p.name === name)
 
-  if (nameExists) {
-    return response
-      .status(HTTP_STATUS.BAD_REQUEST)
-      .json({ error: 'name must be unique' })
-  }
+  // if (nameExists) {
+  //   return response
+  //     .status(HTTP_STATUS.BAD_REQUEST)
+  //     .json({ error: 'name must be unique' })
+  // }
 
-  const id = (Math.random() * 1000000).toFixed(0)
-  const newPerson = { id, name, number }
-  PERSONS.push(newPerson)
+  const newPerson = new Person({
+    name,
+    number
+  })
 
-  response.status(HTTP_STATUS.CREATED).json(newPerson)
+  newPerson.save().then((savedPerson) => {
+    response.status(HTTP_STATUS.CREATED).json(savedPerson)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
