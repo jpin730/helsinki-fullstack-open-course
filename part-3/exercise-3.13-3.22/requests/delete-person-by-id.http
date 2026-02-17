@@ -1,0 +1,3 @@
+@personId = 1
+
+DELETE {{baseUrl}}/api/persons/{{personId}}

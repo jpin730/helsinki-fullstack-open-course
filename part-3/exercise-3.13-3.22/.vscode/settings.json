@@ -1,0 +1,12 @@
+{
+  "rest-client.environmentVariables": {
+    "$shared": {},
+    "local": {
+      "baseUrl": "http://localhost:3001"
+    },
+    "production": {
+      "baseUrl": "https://helsinki-fullstack-open-course.onrender.com"
+    }
+  },
+  "standard.autoFixOnSave": true
+}
