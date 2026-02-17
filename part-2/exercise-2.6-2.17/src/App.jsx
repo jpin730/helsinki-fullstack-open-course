@@ -58,12 +58,8 @@ const App = () => {
       clearMessage()
       return true
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        const errorMessage = `${ERROR_MESSAGE_PREFIX}Information of ${name} has already been removed from server`
-        setMessage(errorMessage)
-        clearMessage()
-      }
-      console.error('Error updating person:', error)
+      setMessage(`${ERROR_MESSAGE_PREFIX}${error.response.data?.error ?? error.message}`)
+      clearMessage()
       return false
     }
   }
@@ -82,6 +78,8 @@ const App = () => {
       clearMessage()
       return true
     } catch (error) {
+      setMessage(`${ERROR_MESSAGE_PREFIX}${error.response.data?.error ?? error.message}`)
+      clearMessage()
       console.error('Error adding person:', error)
       return false
     }
