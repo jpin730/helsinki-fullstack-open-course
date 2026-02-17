@@ -7,6 +7,5 @@
     "production": {
       "baseUrl": "https://helsinki-fullstack-open-course.onrender.com"
     }
-  },
-  "standard.autoFixOnSave": true
+  }
 }
