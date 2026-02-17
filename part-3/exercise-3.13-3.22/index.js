@@ -19,59 +19,64 @@ app.use(express.json())
 app.use(morgan(requestLogger))
 
 app.get('/api', (_, response) => {
-  response.status(HTTP_STATUS.OK).end()
+  return response.status(HTTP_STATUS.OK).end()
 })
 
 app.get('/api/info', (_, response) => {
-  Person.countDocuments({}).then((count) => {
-    const date = new Date()
-    response.send(
+  Person.countDocuments({})
+    .then((count) => {
+      const date = new Date()
+      response.send(
       `<p>Phonebook has info for ${count} people</p><p>${date}</p>`
-    )
-  })
+      )
+    })
 })
 
 app.get('/api/persons', (_, response) => {
-  Person.find({}).then((persons) => {
-    response.json(persons)
-  })
+  Person.find({})
+    .then((persons) => response.json(persons))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-  Person.findById(request.params.id).then((person) => {
-    if (person) {
-      response.json(person)
-    } else {
-      response.status(HTTP_STATUS.NOT_FOUND).end()
-    }
-  }).catch((error) => next(error))
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        return response.json(person)
+      }
+      return response.status(HTTP_STATUS.NOT_FOUND).end()
+    })
+    .catch((error) => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const id = request.params.id
   const { name, number } = request.body
 
   if (name == null || number == null) {
-    response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'name or number is missing' })
+    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'name or number is missing' })
   }
 
-  Person.findById(id).then((existingPerson) => {
-    if (!existingPerson) {
-      response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
-    }
+  const id = request.params.id
 
-    existingPerson.name = name
-    existingPerson.number = number
+  Person.findById(id)
+    .then((existingPerson) => {
+      if (!existingPerson) {
+        return response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
+      }
 
-    existingPerson.save().then((updatedPerson) => response.json(updatedPerson))
-  }).catch((error) => next(error))
+      existingPerson.name = name
+      existingPerson.number = number
+
+      existingPerson.save()
+        .then((updatedPerson) => response.json(updatedPerson))
+    })
+    .catch((error) => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const { name, number } = request.body
 
   if (name == null || number == null) {
-    response.status().json({ error: 'name or number is missing' })
+    return response.status().json({ error: 'name or number is missing' })
   }
 
   const newPerson = new Person({
@@ -79,19 +84,20 @@ app.post('/api/persons', (request, response) => {
     number
   })
 
-  newPerson.save().then((savedPerson) => {
-    response.status(HTTP_STATUS.CREATED).json(savedPerson)
-  })
+  newPerson.save()
+    .then((savedPerson) => response.status(HTTP_STATUS.CREATED).json(savedPerson))
+    .catch((error) => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   Person.findByIdAndDelete(id).then((deletedPerson) => {
     if (deletedPerson) {
-      response.status(HTTP_STATUS.OK).json(deletedPerson)
+      return response.status(HTTP_STATUS.OK).json(deletedPerson)
     }
-    response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
-  }).catch((error) => next(error))
+    return response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
+  })
+    .catch((error) => next(error))
 })
 
 app.use(errorHandler)
