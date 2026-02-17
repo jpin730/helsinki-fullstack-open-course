@@ -1,6 +1,5 @@
 const express = require('express')
 const morgan = require('morgan')
-const mongoose = require('mongoose')
 
 if (process.env.NODE_ENV !== 'production') {
   process.loadEnvFile()
@@ -11,33 +10,14 @@ const PERSONS = require('./consts/persons')
 
 const Person = require('./models/person')
 
+const requestLogger = require('./utils/request-logger')
+const errorHandler = require('./utils/error-handler')
+
 const app = express()
 
-app.use(express.json())
-
-// Manual CORS middleware
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*')
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-
-//   // Handle preflight requests
-//   if (req.method === 'OPTIONS') {
-//     return res.sendStatus(200)
-//   }
-
-//   next()
-// })
-
 app.use(express.static('public'))
-
-morgan.token('body', (req) =>
-  req.body && Object.keys(req.body).length > 0 ? JSON.stringify(req.body) : ''
-)
-
-app.use(
-  morgan(':method :url :status :res[content-length] - :response-time ms :body')
-)
+app.use(express.json())
+app.use(morgan(requestLogger))
 
 app.get('/api', (_, response) => {
   response.send('Hello  World!')
@@ -103,16 +83,6 @@ app.delete('/api/persons/:id', (request, response) => {
   PERSONS.splice(personIndex, 1)
   response.status(HTTP_STATUS.NO_CONTENT).end()
 })
-
-const errorHandler = (error, _, response, next) => {
-  console.error(error.message)
-
-  if (error instanceof mongoose.Error.CastError) {
-    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: error.message })
-  }
-
-  next(error)
-}
 
 app.use(errorHandler)
 
