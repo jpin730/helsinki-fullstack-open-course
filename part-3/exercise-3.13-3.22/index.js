@@ -1,7 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
 
-process.loadEnvFile()
+if (process.env.NODE_ENV !== 'production') {
+  process.loadEnvFile()
+}
 
 const HTTP_STATUS = require('./consts/http-status')
 const PERSONS = require('./consts/persons')
