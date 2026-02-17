@@ -46,21 +46,32 @@ app.get('/api/persons/:id', (request, response, next) => {
   }).catch((error) => next(error))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const id = request.params.id
+  const { name, number } = request.body
+
+  if (name == null || number == null) {
+    response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'name or number is missing' })
+  }
+
+  Person.findById(id).then((existingPerson) => {
+    if (!existingPerson) {
+      response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
+    }
+
+    existingPerson.name = name
+    existingPerson.number = number
+
+    existingPerson.save().then((updatedPerson) => response.json(updatedPerson))
+  }).catch((error) => next(error))
+})
+
 app.post('/api/persons', (request, response) => {
   const { name, number } = request.body
 
   if (name == null || number == null) {
     response.status().json({ error: 'name or number is missing' })
   }
-
-  // TODO: Check if name already exists in the database
-  // const nameExists = PERSONS.some((p) => p.name === name)
-
-  // if (nameExists) {
-  //   return response
-  //     .status(HTTP_STATUS.BAD_REQUEST)
-  //     .json({ error: 'name must be unique' })
-  // }
 
   const newPerson = new Person({
     name,
@@ -84,5 +95,5 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT ?? 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

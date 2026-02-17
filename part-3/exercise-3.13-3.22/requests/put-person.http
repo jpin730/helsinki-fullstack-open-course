@@ -1,0 +1,9 @@
+@personId = 1
+
+PUT {{baseUrl}}/api/persons/{{personId}}
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "number": "987-6543210"
+}
