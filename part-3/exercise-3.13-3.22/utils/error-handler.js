@@ -5,7 +5,7 @@ const HTTP_STATUS = require('../consts/http-status')
 const errorHandler = (error, _, response, next) => {
   console.error(error.message)
 
-  if (error instanceof mongoose.Error.CastError) {
+  if (error instanceof mongoose.Error.CastError || error instanceof mongoose.Error.ValidationError) {
     return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: error.message })
   }
 
