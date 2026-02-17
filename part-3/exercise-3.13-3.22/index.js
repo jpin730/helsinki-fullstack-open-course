@@ -39,7 +39,7 @@ app.get('/api/persons', (_, response) => {
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id).then((person) => {
     if (person) {
-      return response.json(person)
+      response.json(person)
     }
 
     response.status(HTTP_STATUS.NOT_FOUND).end()
@@ -50,7 +50,7 @@ app.post('/api/persons', (request, response) => {
   const { name, number } = request.body
 
   if (name == null || number == null) {
-    return response.status().json({ error: 'name or number is missing' })
+    response.status().json({ error: 'name or number is missing' })
   }
 
   // TODO: Check if name already exists in the database
@@ -72,16 +72,14 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  const personIndex = PERSONS.findIndex((p) => p.id === id)
-
-  if (personIndex === -1) {
-    return response.status(HTTP_STATUS.NOT_FOUND).end()
-  }
-
-  PERSONS.splice(personIndex, 1)
-  response.status(HTTP_STATUS.NO_CONTENT).end()
+  Person.findByIdAndDelete(id).then((deletedPerson) => {
+    if (deletedPerson) {
+      response.status(HTTP_STATUS.OK).json(deletedPerson)
+    }
+    response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
+  }).catch((error) => next(error))
 })
 
 app.use(errorHandler)
