@@ -6,7 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const HTTP_STATUS = require('./consts/http-status')
-const PERSONS = require('./consts/persons')
 
 const Person = require('./models/person')
 
@@ -20,14 +19,16 @@ app.use(express.json())
 app.use(morgan(requestLogger))
 
 app.get('/api', (_, response) => {
-  response.send('Hello  World!')
+  response.status(HTTP_STATUS.OK).end()
 })
 
 app.get('/api/info', (_, response) => {
-  const date = new Date()
-  response.send(
-    `<p>Phonebook has info for ${PERSONS.length} people</p><p>${date}</p>`
-  )
+  Person.countDocuments({}).then((count) => {
+    const date = new Date()
+    response.send(
+      `<p>Phonebook has info for ${count} people</p><p>${date}</p>`
+    )
+  })
 })
 
 app.get('/api/persons', (_, response) => {
@@ -40,9 +41,9 @@ app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id).then((person) => {
     if (person) {
       response.json(person)
+    } else {
+      response.status(HTTP_STATUS.NOT_FOUND).end()
     }
-
-    response.status(HTTP_STATUS.NOT_FOUND).end()
   }).catch((error) => next(error))
 })
 
