@@ -48,6 +48,23 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch((error) => next(error))
 })
 
+app.post('/api/persons', (request, response, next) => {
+  const { name, number } = request.body
+
+  if (name == null || number == null) {
+    return response.status().json({ error: 'name or number is missing' })
+  }
+
+  const newPerson = new Person({
+    name,
+    number
+  })
+
+  newPerson.save()
+    .then((savedPerson) => response.status(HTTP_STATUS.CREATED).json(savedPerson))
+    .catch((error) => next(error))
+})
+
 app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
@@ -69,23 +86,6 @@ app.put('/api/persons/:id', (request, response, next) => {
       existingPerson.save()
         .then((updatedPerson) => response.json(updatedPerson))
     })
-    .catch((error) => next(error))
-})
-
-app.post('/api/persons', (request, response, next) => {
-  const { name, number } = request.body
-
-  if (name == null || number == null) {
-    return response.status().json({ error: 'name or number is missing' })
-  }
-
-  const newPerson = new Person({
-    name,
-    number
-  })
-
-  newPerson.save()
-    .then((savedPerson) => response.status(HTTP_STATUS.CREATED).json(savedPerson))
     .catch((error) => next(error))
 })
 
