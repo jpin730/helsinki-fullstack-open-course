@@ -1,5 +1,6 @@
 const express = require('express')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
 
 if (process.env.NODE_ENV !== 'production') {
   process.loadEnvFile()
@@ -55,15 +56,14 @@ app.get('/api/persons', (_, response) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = PERSONS.find((p) => p.id === id)
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id).then((person) => {
+    if (person) {
+      return response.json(person)
+    }
 
-  if (person == null) {
-    return response.status(HTTP_STATUS.NOT_FOUND).end()
-  }
-
-  response.json(person)
+    response.status(HTTP_STATUS.NOT_FOUND).end()
+  }).catch((error) => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
@@ -103,6 +103,18 @@ app.delete('/api/persons/:id', (request, response) => {
   PERSONS.splice(personIndex, 1)
   response.status(HTTP_STATUS.NO_CONTENT).end()
 })
+
+const errorHandler = (error, _, response, next) => {
+  console.error(error.message)
+
+  if (error instanceof mongoose.Error.CastError) {
+    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: error.message })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT ?? 3001
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
