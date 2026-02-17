@@ -83,20 +83,21 @@ app.put('/api/persons/:id', (request, response, next) => {
       existingPerson.name = name
       existingPerson.number = number
 
-      existingPerson.save()
-        .then((updatedPerson) => response.json(updatedPerson))
+      return existingPerson.save()
     })
+    .then((updatedPerson) => response.json(updatedPerson))
     .catch((error) => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  Person.findByIdAndDelete(id).then((deletedPerson) => {
-    if (deletedPerson) {
-      return response.status(HTTP_STATUS.OK).json(deletedPerson)
-    }
-    return response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
-  })
+  Person.findByIdAndDelete(id)
+    .then((deletedPerson) => {
+      if (deletedPerson) {
+        return response.status(HTTP_STATUS.OK).json(deletedPerson)
+      }
+      return response.status(HTTP_STATUS.NOT_FOUND).json({ error: 'person not found' })
+    })
     .catch((error) => next(error))
 })
 
