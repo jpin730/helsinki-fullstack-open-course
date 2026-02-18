@@ -7,16 +7,21 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js",
-    "test": "node --test",
-    "test:watch": "node --test --watch",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "test": "cross-env NODE_ENV=testing node --test",
+    "test:watch": "cross-env NODE_ENV=testing node --test --watch",
     "prepare": "cd ../.. && husky part-4/exercise-4.1-4.23/.husky"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^1.0.1",
     "@eslint/markdown": "^7.5.1",
+    "cross-env": "^10.1.0",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
@@ -28,9 +33,5 @@
   "lint-staged": {
     "*": "npx prettier --write --ignore-unknown",
     "**/*.{js,mjs,cjs,json,jsonc,md}": "npx eslint --fix"
-  },
-  "dependencies": {
-    "express": "^5.2.1",
-    "mongoose": "^9.2.1"
   }
 }
