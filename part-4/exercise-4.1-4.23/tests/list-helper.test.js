@@ -125,3 +125,44 @@ describe('most blogs', () => {
     });
   });
 });
+
+describe('most likes', () => {
+  test('of empty list is null', () => {
+    // Arrange
+    const emptyList = [];
+
+    // Act
+    const result = listHelper.mostLikes(emptyList);
+
+    // Assert
+    assert.strictEqual(result, null);
+  });
+
+  test('when list has only one blog, equals that author with their likes', () => {
+    // Arrange
+    const listWithOneBlog = [structuredClone(mockedBlogs.at(0))];
+
+    // Act
+    const result = listHelper.mostLikes(listWithOneBlog);
+
+    // Assert
+    assert.deepStrictEqual(result, {
+      author: 'Michael Chan',
+      likes: 7,
+    });
+  });
+
+  test('of a bigger list is found right', () => {
+    // Arrange
+    const blogs = structuredClone(mockedBlogs);
+
+    // Act
+    const result = listHelper.mostLikes(blogs);
+
+    // Assert
+    assert.deepStrictEqual(result, {
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    });
+  });
+});
