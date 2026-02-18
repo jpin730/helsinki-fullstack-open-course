@@ -14,8 +14,5 @@
       ],
       "type": "node"
     }
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
+  ]
 }
