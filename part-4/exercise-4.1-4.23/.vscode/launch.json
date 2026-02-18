@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "console": "integratedTerminal",
+      "name": "npm run dev",
+      "request": "launch",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    }
+  ]
+}
