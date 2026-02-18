@@ -3,13 +3,15 @@ const blogsRouter = require('express').Router();
 const HTTP_STATUS = require('../consts/http-status');
 const Blog = require('../models/blog');
 
-blogsRouter.get('/', (_, response) => {
-  Blog.find({}).then((blogs) => response.json(blogs));
+blogsRouter.get('/', async (_, response) => {
+  const blogs = await Blog.find({});
+  return response.json(blogs);
 });
 
-blogsRouter.post('/', (request, response) => {
+blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body);
-  blog.save().then((result) => response.status(HTTP_STATUS.CREATED).json(result));
+  const savedBlog = await blog.save();
+  return response.status(HTTP_STATUS.CREATED).json(savedBlog);
 });
 
 module.exports = blogsRouter;
