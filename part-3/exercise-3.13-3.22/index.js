@@ -27,7 +27,7 @@ app.get('/api/info', (_, response) => {
     .then((count) => {
       const date = new Date()
       response.send(
-      `<p>Phonebook has info for ${count} people</p><p>${date}</p>`
+        `<p>Phonebook has info for ${count} people</p><p>${date}</p>`,
       )
     })
 })
@@ -57,7 +57,7 @@ app.post('/api/persons', (request, response, next) => {
 
   const newPerson = new Person({
     name,
-    number
+    number,
   })
 
   newPerson.save()
