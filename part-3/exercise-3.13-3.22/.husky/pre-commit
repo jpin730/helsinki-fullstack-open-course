@@ -1,0 +1,2 @@
+cd part-3/exercise-3.13-3.22
+npx lint-staged

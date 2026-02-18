@@ -11,11 +11,24 @@
     "deploy": "npm run build:ui && git add . && git commit -m \"build: :rocket: deploy\" && git push origin main",
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . --fix",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "cd ../.. && husky part-3/exercise-3.13-3.22/.husky"
   },
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.2.1",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.8.0",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  },
+  "lint-staged": {
+    "**/*.{js,mjs,cjs}": "npx eslint --fix"
   }
 }
