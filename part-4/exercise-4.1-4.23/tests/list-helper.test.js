@@ -84,3 +84,44 @@ describe('favorite blog', () => {
     assert.deepStrictEqual(result, mockedBlogs.at(2));
   });
 });
+
+describe('most blogs', () => {
+  test('of empty list is null', () => {
+    // Arrange
+    const emptyList = [];
+
+    // Act
+    const result = listHelper.mostBlogs(emptyList);
+
+    // Assert
+    assert.strictEqual(result, null);
+  });
+
+  test('when list has only one blog, equals that author with 1 blog', () => {
+    // Arrange
+    const listWithOneBlog = [structuredClone(mockedBlogs.at(0))];
+
+    // Act
+    const result = listHelper.mostBlogs(listWithOneBlog);
+
+    // Assert
+    assert.deepStrictEqual(result, {
+      author: 'Michael Chan',
+      blogs: 1,
+    });
+  });
+
+  test('of a bigger list is found right', () => {
+    // Arrange
+    const blogs = structuredClone(mockedBlogs);
+
+    // Act
+    const result = listHelper.mostBlogs(blogs);
+
+    // Assert
+    assert.deepStrictEqual(result, {
+      author: 'Robert C. Martin',
+      blogs: 3,
+    });
+  });
+});
