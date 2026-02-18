@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 
 const HTTP_STATUS = require('./consts/http-status');
 
+const logger = require('./utils/logger');
+
 process.loadEnvFile();
 
 const app = express();
@@ -17,11 +19,7 @@ const blogSchema = mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema);
 
 const mongoUrl = process.env.MONGODB_URI;
-mongoose.connect(mongoUrl, { family: 4 }).then(() =>
-  // TODO: Remove console.log and use a logger instead
-  // eslint-disable-next-line no-console
-  console.log('Connected to MongoDB'),
-);
+mongoose.connect(mongoUrl, { family: 4 }).then(() => logger.info('Connected to MongoDB'));
 
 app.use(express.json());
 
@@ -35,8 +33,4 @@ app.post('/api/blogs', (request, response) => {
 });
 
 const PORT = process.env.PORT;
-app.listen(PORT, () =>
-  // TODO: Remove console.log and use a logger instead
-  // eslint-disable-next-line no-console
-  console.log(`Server running on port ${PORT}`),
-);
+app.listen(PORT, () => logger.info(`Server running on port ${PORT}`));
