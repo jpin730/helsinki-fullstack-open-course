@@ -27,5 +27,9 @@
   "lint-staged": {
     "*": "npx prettier --write --ignore-unknown",
     "**/*.{js,mjs,cjs,json,jsonc,md}": "npx eslint --fix"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1"
   }
 }
