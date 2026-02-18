@@ -1,4 +1,7 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
   "rest-client.environmentVariables": {
     "$shared": {
       "baseUrl": "http://localhost:3003"

@@ -1,0 +1,2 @@
+cd part-4/exercise-4.1-4.23
+npx lint-staged
