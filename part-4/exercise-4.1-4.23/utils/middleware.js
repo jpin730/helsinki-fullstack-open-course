@@ -14,6 +14,10 @@ const errorHandler = (error, _, response, next) => {
     return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: error.message })
   }
 
+  if (error.message) {
+    return response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: error.message })
+  }
+
   next(error)
 }
 
