@@ -108,7 +108,7 @@ describe('POST /api/blogs', () => {
 })
 
 describe('DELETE /api/blogs/:id', () => {
-  test('succeeds with 204 if id is valid', async () => {
+  test('succeeds with NO_CONTENT if id is valid', async () => {
     const blogsAtStart = await helper.getBlogsInDb()
     const blogToDelete = blogsAtStart.at(0)
 
@@ -121,7 +121,7 @@ describe('DELETE /api/blogs/:id', () => {
     assert(!ids.includes(blogToDelete.id))
   })
 
-  test('returns 404 if blog does not exist', async () => {
+  test('returns NOT FOUND if blog does not exist', async () => {
     const nonExistingId = await helper.getNonExistingId()
 
     await api.delete(`/api/blogs/${nonExistingId}`).expect(HTTP_STATUS.NOT_FOUND)
@@ -129,7 +129,7 @@ describe('DELETE /api/blogs/:id', () => {
 })
 
 describe('PUT /api/blogs/:id', () => {
-  test('succeeds with 204 and updates the blog', async () => {
+  test('succeeds with NO CONTENT and updates the blog', async () => {
     const blogsAtStart = await helper.getBlogsInDb()
     const blogToUpdate = blogsAtStart.at(0)
 
@@ -145,7 +145,7 @@ describe('PUT /api/blogs/:id', () => {
     assert.strictEqual(updatedBlog.likes, blogToUpdate.likes + 1)
   })
 
-  test('returns 404 if blog does not exist', async () => {
+  test('returns NOT FOUND if blog does not exist', async () => {
     const nonExistingId = await helper.getNonExistingId()
 
     await api.put(`/api/blogs/${nonExistingId}`).send({ likes: 0 }).expect(HTTP_STATUS.NOT_FOUND)

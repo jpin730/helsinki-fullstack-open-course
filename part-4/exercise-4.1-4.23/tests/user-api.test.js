@@ -54,7 +54,7 @@ describe.only('POST /api/users', () => {
     assert.strictEqual(response.body.passwordHash, undefined)
   })
 
-  test('creation fails with 400 if username is missing', async () => {
+  test('creation fails with BAD REQUEST if username is missing', async () => {
     const usersAtStart = await helper.getUsersInDb()
 
     const newUser = {
@@ -70,7 +70,7 @@ describe.only('POST /api/users', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 
-  test('creation fails with 400 if username is shorter than 3 characters', async () => {
+  test('creation fails with BAD REQUEST if username is shorter than 3 characters', async () => {
     const usersAtStart = await helper.getUsersInDb()
 
     const newUser = {
@@ -87,7 +87,7 @@ describe.only('POST /api/users', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 
-  test('creation fails with 400 if password is missing', async () => {
+  test('creation fails with BAD REQUEST if password is missing', async () => {
     const usersAtStart = await helper.getUsersInDb()
 
     const newUser = {
@@ -103,7 +103,7 @@ describe.only('POST /api/users', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 
-  test('creation fails with 400 if password is shorter than 3 characters', async () => {
+  test('creation fails with BAD REQUEST if password is shorter than 3 characters', async () => {
     const usersAtStart = await helper.getUsersInDb()
 
     const newUser = {
@@ -120,7 +120,7 @@ describe.only('POST /api/users', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 
-  test('creation fails with 400 if username is already taken', async () => {
+  test('creation fails with BAD REQUEST if username is already taken', async () => {
     const usersAtStart = await helper.getUsersInDb()
 
     const duplicateUser = {
