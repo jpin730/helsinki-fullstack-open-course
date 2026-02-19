@@ -3,7 +3,7 @@ const assert = require('node:assert');
 
 const listHelper = require('../utils/list-helper');
 
-const mockedBlogs = require('../mocks/blogs');
+const { BLOGS } = require('./test-helper');
 
 test('dummy returns one', () => {
   // Arrange
@@ -29,7 +29,7 @@ describe('total likes', () => {
 
   test('when list has only one blog, equals the likes of that', () => {
     // Arrange
-    const listWithOneBlog = [structuredClone(mockedBlogs.at(0))];
+    const listWithOneBlog = [BLOGS.at(0)];
 
     // Act
     const result = listHelper.totalLikes(listWithOneBlog);
@@ -40,7 +40,7 @@ describe('total likes', () => {
 
   test('of a bigger list is calculated right', () => {
     // Arrange
-    const blogs = structuredClone(mockedBlogs);
+    const blogs = BLOGS;
 
     // Act
     const result = listHelper.totalLikes(blogs);
@@ -64,7 +64,7 @@ describe('favorite blog', () => {
 
   test('when list has only one blog, equals that blog', () => {
     // Arrange
-    const listWithOneBlog = [structuredClone(mockedBlogs.at(0))];
+    const listWithOneBlog = [BLOGS.at(0)];
 
     // Act
     const result = listHelper.favoriteBlog(listWithOneBlog);
@@ -75,13 +75,13 @@ describe('favorite blog', () => {
 
   test('of a bigger list is found right', () => {
     // Arrange
-    const blogs = structuredClone(mockedBlogs);
+    const blogs = BLOGS;
 
     // Act
     const result = listHelper.favoriteBlog(blogs);
 
     // Assert
-    assert.deepStrictEqual(result, mockedBlogs.at(2));
+    assert.deepStrictEqual(result, BLOGS.at(2));
   });
 });
 
@@ -99,7 +99,7 @@ describe('most blogs', () => {
 
   test('when list has only one blog, equals that author with 1 blog', () => {
     // Arrange
-    const listWithOneBlog = [structuredClone(mockedBlogs.at(0))];
+    const listWithOneBlog = [BLOGS.at(0)];
 
     // Act
     const result = listHelper.mostBlogs(listWithOneBlog);
@@ -113,7 +113,7 @@ describe('most blogs', () => {
 
   test('of a bigger list is found right', () => {
     // Arrange
-    const blogs = structuredClone(mockedBlogs);
+    const blogs = BLOGS;
 
     // Act
     const result = listHelper.mostBlogs(blogs);
@@ -140,7 +140,7 @@ describe('most likes', () => {
 
   test('when list has only one blog, equals that author with their likes', () => {
     // Arrange
-    const listWithOneBlog = [structuredClone(mockedBlogs.at(0))];
+    const listWithOneBlog = [BLOGS.at(0)];
 
     // Act
     const result = listHelper.mostLikes(listWithOneBlog);
@@ -154,7 +154,7 @@ describe('most likes', () => {
 
   test('of a bigger list is found right', () => {
     // Arrange
-    const blogs = structuredClone(mockedBlogs);
+    const blogs = BLOGS;
 
     // Act
     const result = listHelper.mostLikes(blogs);
