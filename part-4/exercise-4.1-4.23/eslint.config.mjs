@@ -1,9 +1,9 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import json from '@eslint/json';
-import markdown from '@eslint/markdown';
-import { defineConfig } from 'eslint/config';
-import prettier from 'eslint-plugin-prettier/recommended';
+import js from '@eslint/js'
+import globals from 'globals'
+import json from '@eslint/json'
+import markdown from '@eslint/markdown'
+import { defineConfig } from 'eslint/config'
+import prettier from 'eslint-plugin-prettier/recommended'
 
 export default defineConfig([
   prettier,
@@ -34,4 +34,4 @@ export default defineConfig([
     language: 'markdown/commonmark',
     extends: ['markdown/recommended'],
   },
-]);
+])
