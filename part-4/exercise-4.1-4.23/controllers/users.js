@@ -14,11 +14,6 @@ usersRouter.post('/', async (request, response) => {
       .json({ error: 'password must be at least 3 characters long' })
   }
 
-  const existingUser = await User.findOne({ username })
-  if (existingUser) {
-    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'username must be unique' })
-  }
-
   const passwordHash = await bcrypt.hash(password, 10)
 
   const user = new User({
