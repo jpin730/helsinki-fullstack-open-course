@@ -17,6 +17,7 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body, {
     returnDocument: 'after',
+    runValidators: true,
   })
   if (!updatedBlog) {
     return response.status(HTTP_STATUS.NOT_FOUND).end()
