@@ -32,8 +32,29 @@ test('unique identifier of blogs is named id', async () => {
   const response = await api.get('/api/blogs');
 
   const blog = response.body.at(0);
-  assert.ok(blog.id, 'id property should exist');
-  assert.strictEqual(blog._id, undefined, '_id should not be exposed');
+  assert.ok(blog.id);
+  assert.strictEqual(blog._id, undefined);
+});
+
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'Test blog',
+    author: 'Test author',
+    url: 'https://test.com',
+    likes: 0,
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(HTTP_STATUS.CREATED)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsInDb = await helper.getBlogsInDb();
+  assert.strictEqual(blogsInDb.length, helper.BLOGS.length + 1);
+
+  const titles = blogsInDb.map((blog) => blog.title);
+  assert(titles.includes(newBlog.title));
 });
 
 after(async () => {
