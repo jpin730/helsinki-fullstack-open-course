@@ -107,6 +107,27 @@ describe('POST /api/blogs', () => {
   })
 })
 
+describe('DELETE /api/blogs/:id', () => {
+  test('succeeds with 204 if id is valid', async () => {
+    const blogsAtStart = await helper.getBlogsInDb()
+    const blogToDelete = blogsAtStart.at(0)
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(HTTP_STATUS.NO_CONTENT)
+
+    const blogsAtEnd = await helper.getBlogsInDb()
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+
+    const ids = blogsAtEnd.map((b) => b.id)
+    assert(!ids.includes(blogToDelete.id))
+  })
+
+  test('returns 404 if blog does not exist', async () => {
+    const nonExistingId = await helper.getNonExistingId()
+
+    await api.delete(`/api/blogs/${nonExistingId}`).expect(HTTP_STATUS.NOT_FOUND)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
