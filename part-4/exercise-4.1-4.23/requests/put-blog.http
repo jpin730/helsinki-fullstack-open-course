@@ -1,0 +1,11 @@
+@blogId = 1
+
+PUT {{baseUrl}}/api/blogs/{{blogId}}
+Content-Type: application/json
+
+{
+  "title": "Updated Blog Title",
+  "author": "Updated Author",
+  "url": "https://updatedblog.com",
+  "likes": 10
+}
