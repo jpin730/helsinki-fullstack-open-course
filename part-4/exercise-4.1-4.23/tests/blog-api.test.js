@@ -128,6 +128,30 @@ describe('DELETE /api/blogs/:id', () => {
   })
 })
 
+describe('PUT /api/blogs/:id', () => {
+  test('succeeds with 204 and updates the blog', async () => {
+    const blogsAtStart = await helper.getBlogsInDb()
+    const blogToUpdate = blogsAtStart.at(0)
+
+    const updatedFields = { likes: blogToUpdate.likes + 1 }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedFields)
+      .expect(HTTP_STATUS.NO_CONTENT)
+
+    const blogsAtEnd = await helper.getBlogsInDb()
+    const updatedBlog = blogsAtEnd.find((b) => b.id === blogToUpdate.id)
+    assert.strictEqual(updatedBlog.likes, blogToUpdate.likes + 1)
+  })
+
+  test('returns 404 if blog does not exist', async () => {
+    const nonExistingId = await helper.getNonExistingId()
+
+    await api.put(`/api/blogs/${nonExistingId}`).send({ likes: 0 }).expect(HTTP_STATUS.NOT_FOUND)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
