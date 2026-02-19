@@ -35,3 +35,7 @@ If you want to debug the application using Visual Studio Code, just press F5 or 
 ## Testing with REST Client
 
 HTTP requests are available in the `requests/` folder. Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) VS Code extension to use them.
+
+## Environment Variables
+
+Copy the `.env.template` file to `.env` for development and `.env.test.local` for testing, and fill in the appropriate values.
