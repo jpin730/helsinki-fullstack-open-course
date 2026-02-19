@@ -19,7 +19,7 @@ beforeEach(async () => {
   await user.save()
 })
 
-describe.only('POST /api/users', () => {
+describe('POST /api/users', () => {
   test('a valid user can be created', async () => {
     const usersAtStart = await helper.getUsersInDb()
 
@@ -134,7 +134,7 @@ describe.only('POST /api/users', () => {
       .send(duplicateUser)
       .expect(HTTP_STATUS.BAD_REQUEST)
 
-    assert.strictEqual(response.body.error, 'username must be unique')
+    assert.match(response.body.error, /^E11000 duplicate key.+username.+/)
 
     const usersAtEnd = await helper.getUsersInDb()
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
