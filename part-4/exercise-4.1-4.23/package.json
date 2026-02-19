@@ -14,6 +14,7 @@
     "prepare": "cd ../.. && husky part-4/exercise-4.1-4.23/.husky"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1",
     "mongoose": "^9.2.1"
   },
