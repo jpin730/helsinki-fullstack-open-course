@@ -28,6 +28,14 @@ test('all blogs are returned', async () => {
   assert.strictEqual(response.body.length, helper.BLOGS.length);
 });
 
+test('unique identifier of blogs is named id', async () => {
+  const response = await api.get('/api/blogs');
+
+  const blog = response.body.at(0);
+  assert.ok(blog.id, 'id property should exist');
+  assert.strictEqual(blog._id, undefined, '_id should not be exposed');
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
