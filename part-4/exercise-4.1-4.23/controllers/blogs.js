@@ -6,21 +6,13 @@ const config = require('../utils/config')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
-const getTokenFrom = (request) => {
-  const authorizationHeader = request.get('authorization')
-  if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-    return authorizationHeader.replace('Bearer ', '')
-  }
-  return null
-}
-
 blogsRouter.get('/', async (_, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   return response.json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
-  const token = getTokenFrom(request)
+  const token = request.token
   if (!token) {
     return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token missing' })
   }
