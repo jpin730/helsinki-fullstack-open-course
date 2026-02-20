@@ -5,6 +5,11 @@ const usersRouter = require('express').Router()
 const HTTP_STATUS = require('../consts/http-status')
 const User = require('../models/user')
 
+usersRouter.get('/', async (_, response) => {
+  const users = await User.find({})
+  return response.json(users)
+})
+
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
