@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { MongoServerError } = require('mongodb')
+const { JsonWebTokenError } = require('jsonwebtoken')
 
 const HTTP_STATUS = require('../consts/http-status')
 const MONGO_ERROR = require('../consts/mongo-error')
@@ -7,12 +8,13 @@ const MONGO_ERROR = require('../consts/mongo-error')
 const logger = require('../utils/logger')
 
 const errorHandler = (error, _, response, next) => {
-  logger.error(error.message)
+  logger.error(`${error.name}: ${error.message}`)
 
   if (
     error instanceof mongoose.Error.CastError ||
     error instanceof mongoose.Error.ValidationError ||
-    (error instanceof MongoServerError && error.code === MONGO_ERROR.DUPLICATE_KEY)
+    (error instanceof MongoServerError && error.code === MONGO_ERROR.DUPLICATE_KEY) ||
+    error instanceof JsonWebTokenError
   ) {
     return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: error.message })
   }
