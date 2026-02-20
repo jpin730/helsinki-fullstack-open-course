@@ -31,7 +31,12 @@ loginRouter.post('/', async (request, response) => {
     sub: user._id,
   }
 
-  const token = jwt.sign(payload, config.JWT_SECRET)
+  const expirationInMinutes = 60
+  const expirationInSeconds = expirationInMinutes * 60
+
+  const token = jwt.sign(payload, config.JWT_SECRET, {
+    expiresIn: expirationInSeconds,
+  })
 
   const { name } = user
 
