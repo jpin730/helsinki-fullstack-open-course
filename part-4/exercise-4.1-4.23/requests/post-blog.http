@@ -1,5 +1,9 @@
+@token = jwt_token
+
 POST {{baseUrl}}/api/blogs
 Content-Type: application/json
+Authorization: Bearer {{token}}
+
 
 {
   "title": "My first blog post",
