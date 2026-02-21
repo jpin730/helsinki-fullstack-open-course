@@ -9,8 +9,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development node --watch index.js",
-    "test": "cross-env NODE_ENV=testing node --test",
-    "test:watch": "cross-env NODE_ENV=testing node --test --watch",
+    "test": "cross-env NODE_ENV=testing node --test --test-concurrency=1",
     "prepare": "cd ../.. && husky part-4/exercise-4.1-4.23/.husky"
   },
   "dependencies": {
