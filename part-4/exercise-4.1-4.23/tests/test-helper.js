@@ -74,7 +74,7 @@ const getUsersInDb = async () => {
 const initRootUser = async () => {
   const existingRoot = await User.findOne({ username: 'root' })
   if (existingRoot) {
-    return existingRoot
+    return existingRoot.toJSON()
   }
 
   const rootUser = new User({
@@ -83,7 +83,9 @@ const initRootUser = async () => {
     passwordHash: await bcrypt.hash('sekret', 10),
   })
 
-  return (await rootUser.save()).toJSON()
+  const savedRoot = await rootUser.save()
+
+  return savedRoot.toJSON()
 }
 
 module.exports = { BLOGS, getBlogsInDb, getNonExistingId, getUsersInDb, initRootUser }
