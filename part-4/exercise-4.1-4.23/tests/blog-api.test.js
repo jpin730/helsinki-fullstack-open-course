@@ -7,6 +7,7 @@ const app = require('../app')
 const HTTP_STATUS = require('../consts/http-status')
 const Blog = require('../models/blog')
 const helper = require('./test-helper')
+const generateJwt = require('../utils/generate-jwt')
 
 const api = supertest(app)
 
@@ -40,16 +41,22 @@ describe('GET /api/blogs', () => {
 
 describe('POST /api/blogs', () => {
   test('a valid blog can be added', async () => {
+    const rootUser = await helper.initRootUser()
+
     const newBlog = {
       title: 'Test blog',
       author: 'Test author',
       url: 'https://test.com',
       likes: 0,
+      user: rootUser.id,
     }
+
+    const token = generateJwt(rootUser)
 
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(HTTP_STATUS.CREATED)
       .expect('Content-Type', /application\/json/)
 
@@ -61,15 +68,21 @@ describe('POST /api/blogs', () => {
   })
 
   test('blog without likes defaults to 0', async () => {
+    const rootUser = await helper.initRootUser()
+
     const newBlog = {
       title: 'Test blog without likes',
       author: 'Test author',
       url: 'https://test.com',
+      user: rootUser.id,
     }
+
+    const token = generateJwt(rootUser)
 
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `Bearer ${token}`)
       .expect(HTTP_STATUS.CREATED)
       .expect('Content-Type', /application\/json/)
 
@@ -81,29 +94,54 @@ describe('POST /api/blogs', () => {
   })
 
   test('blog without title is not added', async () => {
+    const rootUser = await helper.initRootUser()
+
     const newBlog = {
       author: 'Test author',
       url: 'https://test.com',
       likes: 0,
+      user: rootUser.id,
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(HTTP_STATUS.BAD_REQUEST)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${generateJwt(rootUser)}`)
+      .send(newBlog)
+      .expect(HTTP_STATUS.BAD_REQUEST)
 
     const blogsInDb = await helper.getBlogsInDb()
     assert.strictEqual(blogsInDb.length, helper.BLOGS.length)
   })
 
   test('blog without url is not added', async () => {
+    const rootUser = await helper.initRootUser()
+
     const newBlog = {
       title: 'Test blog',
       author: 'Test author',
       likes: 0,
+      user: rootUser.id,
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(HTTP_STATUS.BAD_REQUEST)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${generateJwt(rootUser)}`)
+      .send(newBlog)
+      .expect(HTTP_STATUS.BAD_REQUEST)
 
     const blogsInDb = await helper.getBlogsInDb()
     assert.strictEqual(blogsInDb.length, helper.BLOGS.length)
+  })
+
+  test('unauthorized request is rejected without token', async () => {
+    const newBlog = {
+      title: 'Unauthorized blog',
+      author: 'Test author',
+      url: 'https://test.com',
+      likes: 0,
+    }
+
+    await api.post('/api/blogs').send(newBlog).expect(HTTP_STATUS.UNAUTHORIZED)
   })
 })
 
