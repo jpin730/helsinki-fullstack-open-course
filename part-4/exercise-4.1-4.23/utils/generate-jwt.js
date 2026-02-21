@@ -4,7 +4,7 @@ const config = require('./config')
 const generateJwt = (user) => {
   const payload = {
     username: user.username,
-    sub: user._id,
+    sub: user.id ?? user._id,
   }
 
   const expirationInMinutes = 60
