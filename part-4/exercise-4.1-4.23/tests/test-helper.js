@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
@@ -69,4 +71,19 @@ const getUsersInDb = async () => {
   return users.map((user) => user.toJSON())
 }
 
-module.exports = { BLOGS, getBlogsInDb, getNonExistingId, getUsersInDb }
+const initRootUser = async () => {
+  const existingRoot = await User.findOne({ username: 'root' })
+  if (existingRoot) {
+    return existingRoot
+  }
+
+  const rootUser = new User({
+    username: 'root',
+    name: 'Superuser',
+    passwordHash: await bcrypt.hash('sekret', 10),
+  })
+
+  return (await rootUser.save()).toJSON()
+}
+
+module.exports = { BLOGS, getBlogsInDb, getNonExistingId, getUsersInDb, initRootUser }
