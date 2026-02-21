@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-const config = require('../utils/config')
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -28,8 +26,6 @@ userSchema.set('toJSON', {
   },
 })
 
-const collectionName = config.NODE_ENV === 'testing' ? 'testUsers' : 'users'
-
-const User = mongoose.model('User', userSchema, collectionName)
+const User = mongoose.model('User', userSchema)
 
 module.exports = User

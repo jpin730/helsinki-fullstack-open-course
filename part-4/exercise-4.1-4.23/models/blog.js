@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-const config = require('../utils/config')
-
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true },
   author: String,
@@ -21,6 +19,4 @@ blogSchema.set('toJSON', {
   },
 })
 
-const collectionName = config.NODE_ENV === 'testing' ? 'testBlogs' : 'blogs'
-
-module.exports = mongoose.model('Blog', blogSchema, collectionName)
+module.exports = mongoose.model('Blog', blogSchema)
