@@ -41,7 +41,7 @@ describe('GET /api/blogs', () => {
 
 describe('POST /api/blogs', () => {
   test('a valid blog can be added', async () => {
-    const rootUser = await helper.initRootUser()
+    const rootUser = await helper.initUser()
 
     const newBlog = {
       title: 'Test blog',
@@ -68,7 +68,7 @@ describe('POST /api/blogs', () => {
   })
 
   test('blog without likes defaults to 0', async () => {
-    const rootUser = await helper.initRootUser()
+    const rootUser = await helper.initUser()
 
     const newBlog = {
       title: 'Test blog without likes',
@@ -94,7 +94,7 @@ describe('POST /api/blogs', () => {
   })
 
   test('blog without title is not added', async () => {
-    const rootUser = await helper.initRootUser()
+    const rootUser = await helper.initUser()
 
     const newBlog = {
       author: 'Test author',
@@ -114,7 +114,7 @@ describe('POST /api/blogs', () => {
   })
 
   test('blog without url is not added', async () => {
-    const rootUser = await helper.initRootUser()
+    const rootUser = await helper.initUser()
 
     const newBlog = {
       title: 'Test blog',
@@ -147,10 +147,24 @@ describe('POST /api/blogs', () => {
 
 describe('DELETE /api/blogs/:id', () => {
   test('succeeds with NO_CONTENT if id is valid', async () => {
-    const blogsAtStart = await helper.getBlogsInDb()
-    const blogToDelete = blogsAtStart.at(0)
+    const rootUser = await helper.initUser()
+    const blogToDelete = new Blog({
+      title: 'Blog to delete',
+      author: 'Test author',
+      url: 'https://test.com',
+      likes: 0,
+      user: rootUser.id,
+    })
+    await blogToDelete.save()
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(HTTP_STATUS.NO_CONTENT)
+    const blogsAtStart = await helper.getBlogsInDb()
+
+    const token = generateJwt(rootUser)
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(HTTP_STATUS.NO_CONTENT)
 
     const blogsAtEnd = await helper.getBlogsInDb()
     assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
@@ -162,7 +176,34 @@ describe('DELETE /api/blogs/:id', () => {
   test('returns NOT FOUND if blog does not exist', async () => {
     const nonExistingId = await helper.getNonExistingId()
 
-    await api.delete(`/api/blogs/${nonExistingId}`).expect(HTTP_STATUS.NOT_FOUND)
+    const rootUser = await helper.initUser()
+    const token = generateJwt(rootUser)
+
+    await api
+      .delete(`/api/blogs/${nonExistingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(HTTP_STATUS.NOT_FOUND)
+  })
+
+  test('returns FORBIDDEN if user is not the creator of the blog', async () => {
+    const rootUser = await helper.initUser()
+
+    const blogToDelete = new Blog({
+      title: 'Blog to delete',
+      author: 'Test author',
+      url: 'https://test.com',
+      likes: 0,
+      user: rootUser.id,
+    })
+    await blogToDelete.save()
+
+    const anotherUser = await helper.initUser('anotherUser')
+    const token = generateJwt(anotherUser)
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(HTTP_STATUS.FORBIDDEN)
   })
 })
 

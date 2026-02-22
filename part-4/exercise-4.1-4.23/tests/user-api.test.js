@@ -12,7 +12,7 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await User.deleteMany({})
-  await helper.initRootUser()
+  await helper.initUser()
 })
 
 describe('POST /api/users', () => {

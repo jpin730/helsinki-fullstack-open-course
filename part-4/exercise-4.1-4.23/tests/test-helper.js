@@ -71,15 +71,15 @@ const getUsersInDb = async () => {
   return users.map((user) => user.toJSON())
 }
 
-const initRootUser = async () => {
-  const existingRoot = await User.findOne({ username: 'root' })
+const initUser = async (username = 'root') => {
+  const existingRoot = await User.findOne({ username })
   if (existingRoot) {
     return existingRoot.toJSON()
   }
 
   const rootUser = new User({
-    username: 'root',
-    name: 'Superuser',
+    username,
+    name: username,
     passwordHash: await bcrypt.hash('sekret', 10),
   })
 
@@ -88,4 +88,4 @@ const initRootUser = async () => {
   return savedRoot.toJSON()
 }
 
-module.exports = { BLOGS, getBlogsInDb, getNonExistingId, getUsersInDb, initRootUser }
+module.exports = { BLOGS, getBlogsInDb, getNonExistingId, getUsersInDb, initUser }
