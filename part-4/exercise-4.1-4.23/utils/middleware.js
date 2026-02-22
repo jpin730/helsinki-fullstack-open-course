@@ -1,11 +1,14 @@
 const mongoose = require('mongoose')
 const { MongoServerError } = require('mongodb')
-const { JsonWebTokenError } = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 const HTTP_STATUS = require('../consts/http-status')
 const MONGO_ERROR = require('../consts/mongo-error')
 
 const logger = require('../utils/logger')
+const config = require('../utils/config')
+
+const User = require('../models/user')
 
 const errorHandler = (error, _, response, next) => {
   logger.error(`${error.name}: ${error.message}`)
@@ -14,7 +17,7 @@ const errorHandler = (error, _, response, next) => {
     error instanceof mongoose.Error.CastError ||
     error instanceof mongoose.Error.ValidationError ||
     (error instanceof MongoServerError && error.code === MONGO_ERROR.DUPLICATE_KEY) ||
-    error instanceof JsonWebTokenError
+    error instanceof jwt.JsonWebTokenError
   ) {
     return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: error.message })
   }
@@ -48,4 +51,24 @@ const tokenExtractor = (request, _, next) => {
   next()
 }
 
-module.exports = { errorHandler, requestLogger, unknownEndpoint, tokenExtractor }
+const userExtractor = async (request, response, next) => {
+  const token = request.token
+  if (!token) {
+    return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token missing' })
+  }
+
+  const tokenPayload = jwt.verify(token, config.JWT_SECRET)
+  const userId = tokenPayload.sub
+  if (!userId) {
+    return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(userId)
+  if (!user) {
+    return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token invalid' })
+  }
+  request.user = user
+  next()
+}
+
+module.exports = { errorHandler, requestLogger, unknownEndpoint, tokenExtractor, userExtractor }
