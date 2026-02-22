@@ -1,32 +1,17 @@
 const blogsRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 
 const HTTP_STATUS = require('../consts/http-status')
-const config = require('../utils/config')
 const Blog = require('../models/blog')
-const User = require('../models/user')
+
+const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (_, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   return response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
-  const token = request.token
-  if (!token) {
-    return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token missing' })
-  }
-
-  const tokenPayload = jwt.verify(token, config.JWT_SECRET)
-  const userId = tokenPayload.sub
-  if (!userId) {
-    return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token invalid' })
-  }
-
-  const user = await User.findById(userId)
-  if (!user) {
-    return response.status(HTTP_STATUS.UNAUTHORIZED).json({ error: 'token invalid' })
-  }
+blogsRouter.post('/', userExtractor, async (request, response) => {
+  const user = request.user
 
   const blog = new Blog({
     title: request.body.title,
@@ -54,11 +39,21 @@ blogsRouter.put('/:id', async (request, response) => {
   return response.status(HTTP_STATUS.NO_CONTENT).end()
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-  const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
-  if (!deletedBlog) {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const user = request.user
+  const blogToDelete = await Blog.findById(request.params.id)
+  if (!blogToDelete) {
     return response.status(HTTP_STATUS.NOT_FOUND).end()
   }
+
+  if (blogToDelete.user.toString() !== user._id.toString()) {
+    return response
+      .status(HTTP_STATUS.FORBIDDEN)
+      .json({ error: 'only the creator can delete a blog' })
+  }
+
+  await Blog.findByIdAndDelete(request.params.id)
+
   return response.status(HTTP_STATUS.NO_CONTENT).end()
 })
 
