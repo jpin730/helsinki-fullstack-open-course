@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Blog } from './components/Blog'
+import { BlogEditor } from './components/BlogEditor'
 import { LoginForm } from './components/LoginForm'
 import blogService from './services/blogs'
 
@@ -54,6 +55,10 @@ export const App = () => {
     setUser(null)
   }
 
+  const onCreate = (blog) => {
+    setBlogs(blogs.concat(blog))
+  }
+
   return (
     <>
       {message && <blockquote>{message}</blockquote>}
@@ -64,11 +69,14 @@ export const App = () => {
         <div>
           <h2>blogs</h2>
           <p>
-            <b>{user.name} </b>logged in
+            <b>{user.name}</b> logged in
           </p>
           <p>
             <button onClick={onLogout}>Logout</button>
           </p>
+
+          <BlogEditor onCreate={onCreate} onMessage={onMessage} token={user.token} />
+
           <ol>
             {blogs.map((blog) => (
               <Blog key={blog.id} blog={blog} />
