@@ -4,16 +4,40 @@ import { Blog } from './components/Blog'
 import { LoginForm } from './components/LoginForm'
 import blogService from './services/blogs'
 
+const LOGGED_USER_KEY = 'loggedBlogAppUser'
+
 export const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
 
-  useEffect(() => {
-    if (user) {
-      blogService.getAll().then((blogs) => setBlogs(blogs))
+  useEffect(
+    function fetchBlogs() {
+      if (user) {
+        blogService.getAll().then((blogs) => setBlogs(blogs))
+      }
+    },
+    [user],
+  )
+
+  useEffect(function restoreUserSession() {
+    const storedUser = localStorage.getItem(LOGGED_USER_KEY)
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
     }
-  }, [user])
+  }, [])
+
+  useEffect(
+    function syncUserToStorage() {
+      if (user) {
+        localStorage.setItem(LOGGED_USER_KEY, JSON.stringify(user))
+        return
+      }
+
+      localStorage.removeItem(LOGGED_USER_KEY)
+    },
+    [user],
+  )
 
   const onMessage = (message) => {
     setMessage(message)
