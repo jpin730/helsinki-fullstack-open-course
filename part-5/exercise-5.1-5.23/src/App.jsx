@@ -50,6 +50,10 @@ export const App = () => {
     setUser(user)
   }
 
+  const onLogout = () => {
+    setUser(null)
+  }
+
   return (
     <>
       {message && <blockquote>{message}</blockquote>}
@@ -61,6 +65,9 @@ export const App = () => {
           <h2>blogs</h2>
           <p>
             <b>{user.name} </b>logged in
+          </p>
+          <p>
+            <button onClick={onLogout}>Logout</button>
           </p>
           <ol>
             {blogs.map((blog) => (
