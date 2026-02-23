@@ -40,8 +40,8 @@ export const App = () => {
     [user],
   )
 
-  const onMessage = (message) => {
-    setMessage(message)
+  const onMessage = (message, isError = false) => {
+    setMessage({ text: message, isError })
     setTimeout(() => {
       setMessage(null)
     }, 5000)
@@ -61,7 +61,18 @@ export const App = () => {
 
   return (
     <>
-      {message && <blockquote>{message}</blockquote>}
+      {message && (
+        <p
+          style={{
+            border: message.isError ? '2px solid red' : '2px solid green',
+            color: message.isError ? 'red' : 'green',
+            borderRadius: '5px',
+            padding: '10px',
+          }}
+        >
+          {message.text}
+        </p>
+      )}
 
       {!user && <LoginForm onLogin={onLogin} onMessage={onMessage} />}
 

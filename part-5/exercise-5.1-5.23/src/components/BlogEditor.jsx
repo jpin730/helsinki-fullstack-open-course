@@ -18,7 +18,7 @@ export const BlogEditor = ({ onCreate, onMessage, token }) => {
       setUrl('')
       onMessage(`Blog "${blog.title}" created successfully`)
     } catch (error) {
-      onMessage(error.response?.data?.error ?? 'Creating blog failed')
+      onMessage(error.response?.data?.error ?? 'Creating blog failed', true)
     }
   }
 

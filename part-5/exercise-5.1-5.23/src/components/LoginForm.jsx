@@ -14,8 +14,8 @@ export const LoginForm = ({ onLogin, onMessage }) => {
       onLogin(user)
       setUsername('')
       setPassword('')
-    } catch {
-      onMessage('wrong credentials')
+    } catch (error) {
+      onMessage(error.response?.data?.error ?? 'Login failed', true)
     }
   }
 
