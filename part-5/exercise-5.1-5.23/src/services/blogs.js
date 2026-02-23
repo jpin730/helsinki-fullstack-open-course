@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosHeaders } from 'axios'
 
 const baseUrl = '/api/blogs'
 
@@ -7,4 +7,10 @@ const getAll = async () => {
   return response.data
 }
 
-export default { getAll }
+const create = async (blog, token) => {
+  const headers = new AxiosHeaders().setAuthorization(`Bearer ${token}`)
+  const response = await axios.post(baseUrl, blog, { headers })
+  return response.data
+}
+
+export default { getAll, create }
