@@ -5,7 +5,8 @@ import { LoginForm } from './components/LoginForm'
 import blogService from './services/blogs'
 
 export const App = () => {
-  const [user, _] = useState(null)
+  const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
@@ -14,18 +15,36 @@ export const App = () => {
     }
   }, [user])
 
-  if (user === null) {
-    return <LoginForm />
+  const onMessage = (message) => {
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
+
+  const onLogin = (user) => {
+    setUser(user)
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <ul>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </ul>
-    </div>
+    <>
+      {message && <blockquote>{message}</blockquote>}
+
+      {!user && <LoginForm onLogin={onLogin} onMessage={onMessage} />}
+
+      {user && (
+        <div>
+          <h2>blogs</h2>
+          <p>
+            <b>{user.name} </b>logged in
+          </p>
+          <ol>
+            {blogs.map((blog) => (
+              <Blog key={blog.id} blog={blog} />
+            ))}
+          </ol>
+        </div>
+      )}
+    </>
   )
 }
