@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import blogService from '../services/blogs'
 
-export const BlogEditor = ({ onCreate, onMessage, token }) => {
+export const BlogEditor = ({ onCreate, onNotify, token }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -16,9 +16,9 @@ export const BlogEditor = ({ onCreate, onMessage, token }) => {
       setTitle('')
       setAuthor('')
       setUrl('')
-      onMessage(`Blog "${blog.title}" created successfully`)
+      onNotify(`Blog "${blog.title}" created successfully`)
     } catch (error) {
-      onMessage(error.response?.data?.error ?? 'Creating blog failed', true)
+      onNotify(error.response?.data?.error ?? 'Creating blog failed', true)
     }
   }
 

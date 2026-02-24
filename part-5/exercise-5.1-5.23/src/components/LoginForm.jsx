@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import loginService from '../services/login'
 
-export const LoginForm = ({ onLogin, onMessage }) => {
+export const LoginForm = ({ onLogin, onNotify }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -15,7 +15,7 @@ export const LoginForm = ({ onLogin, onMessage }) => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      onMessage(error.response?.data?.error ?? 'Login failed', true)
+      onNotify(error.response?.data?.error ?? 'Login failed', true)
     }
   }
 

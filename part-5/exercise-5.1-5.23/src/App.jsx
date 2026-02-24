@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Blog } from './components/Blog'
 import { BlogEditor } from './components/BlogEditor'
 import { LoginForm } from './components/LoginForm'
+import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
 import blogService from './services/blogs'
 
@@ -10,7 +11,7 @@ const LOGGED_USER_KEY = 'loggedBlogAppUser'
 
 export const App = () => {
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [blogs, setBlogs] = useState([])
 
   useEffect(function fetchBlogs() {
@@ -36,10 +37,10 @@ export const App = () => {
     [user],
   )
 
-  const onMessage = (message, isError = false) => {
-    setMessage({ text: message, isError })
+  const onNotify = (message, isError = false) => {
+    setNotification({ message, isError })
     setTimeout(() => {
-      setMessage(null)
+      setNotification(null)
     }, 5000)
   }
 
@@ -59,22 +60,11 @@ export const App = () => {
     <>
       <h1>Blogs</h1>
 
-      {message && (
-        <p
-          style={{
-            border: message.isError ? '2px solid red' : '2px solid green',
-            color: message.isError ? 'red' : 'green',
-            borderRadius: '5px',
-            padding: '10px',
-          }}
-        >
-          {message.text}
-        </p>
-      )}
+      <Notification notification={notification} />
 
       {!user && (
         <Togglable buttonLabel="Login">
-          <LoginForm onLogin={onLogin} onMessage={onMessage} />
+          <LoginForm onLogin={onLogin} onNotify={onNotify} />
         </Togglable>
       )}
 
@@ -83,21 +73,22 @@ export const App = () => {
           <p>
             <b>{user.name}</b> logged in
           </p>
+
           <p>
             <button onClick={onLogout}>Logout</button>
           </p>
 
           <Togglable buttonLabel="Create new blog">
-            <BlogEditor onCreate={onCreate} onMessage={onMessage} token={user.token} />
+            <BlogEditor onCreate={onCreate} onNotify={onNotify} token={user.token} />
           </Togglable>
         </>
       )}
 
-      <ol>
+      <ul>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
-      </ol>
+      </ul>
     </>
   )
 }
