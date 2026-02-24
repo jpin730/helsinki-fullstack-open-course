@@ -1,8 +1,6 @@
 import { useState } from 'react'
 
-import blogService from '../services/blogs'
-
-export const BlogEditor = ({ onCreate, onNotify, token }) => {
+export const BlogEditor = ({ onCreate }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -10,16 +8,11 @@ export const BlogEditor = ({ onCreate, onNotify, token }) => {
   const handleCreate = async (event) => {
     event.preventDefault()
 
-    try {
-      const blog = await blogService.create({ title, author, url }, token)
-      onCreate(blog)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      onNotify(`Blog "${blog.title}" created successfully`)
-    } catch (error) {
-      onNotify(error.response?.data?.error ?? 'Creating blog failed', true)
-    }
+    onCreate({ title, author, url })
+
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (

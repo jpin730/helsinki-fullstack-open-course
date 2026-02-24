@@ -5,14 +5,16 @@ import { BlogEditor } from './components/BlogEditor'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+
 import blogService from './services/blogs'
+import loginService from './services/login'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
 
 export const App = () => {
+  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
-  const [blogs, setBlogs] = useState([])
 
   const blogEditorRef = useRef()
 
@@ -39,24 +41,35 @@ export const App = () => {
     [user],
   )
 
-  const onNotify = (message, isError = false) => {
+  const notify = (message, isError = false) => {
     setNotification({ message, isError })
     setTimeout(() => {
       setNotification(null)
     }, 5000)
   }
 
-  const onLogin = (user) => {
-    setUser(user)
+  const notifyError = (message) => notify(message, true)
+
+  const login = async ({ username, password }) => {
+    try {
+      const user = await loginService.login({ username, password })
+      setUser(user)
+    } catch (error) {
+      notifyError(error.response?.data?.error ?? 'Login failed')
+    }
   }
 
-  const onLogout = () => {
-    setUser(null)
-  }
+  const logout = () => setUser(null)
 
-  const onCreate = (blog) => {
-    setBlogs(blogs.concat(blog))
-    blogEditorRef.current.toggleVisibility()
+  const createBlog = async ({ title, author, url }) => {
+    try {
+      const blog = await blogService.create({ title, author, url }, user.token)
+      blogEditorRef.current.toggleVisibility()
+      notify(`Blog "${blog.title}" created successfully`)
+      setBlogs(blogs.concat(blog))
+    } catch (error) {
+      notifyError(error.response?.data?.error ?? 'Creating blog failed')
+    }
   }
 
   return (
@@ -66,8 +79,8 @@ export const App = () => {
       <Notification notification={notification} />
 
       {!user && (
-        <Togglable buttonLabel="Login">
-          <LoginForm onLogin={onLogin} onNotify={onNotify} />
+        <Togglable label="Login">
+          <LoginForm onLogin={login} />
         </Togglable>
       )}
 
@@ -78,11 +91,11 @@ export const App = () => {
           </p>
 
           <p>
-            <button onClick={onLogout}>Logout</button>
+            <button onClick={logout}>Logout</button>
           </p>
 
-          <Togglable buttonLabel="Create new blog" ref={blogEditorRef}>
-            <BlogEditor onCreate={onCreate} onNotify={onNotify} token={user.token} />
+          <Togglable label="Create new blog" ref={blogEditorRef}>
+            <BlogEditor onCreate={createBlog} />
           </Togglable>
         </>
       )}
