@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Blog } from './components/Blog'
 import { BlogEditor } from './components/BlogEditor'
@@ -13,6 +13,8 @@ export const App = () => {
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
   const [blogs, setBlogs] = useState([])
+
+  const blogEditorRef = useRef()
 
   useEffect(function fetchBlogs() {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -54,6 +56,7 @@ export const App = () => {
 
   const onCreate = (blog) => {
     setBlogs(blogs.concat(blog))
+    blogEditorRef.current.toggleVisibility()
   }
 
   return (
@@ -78,7 +81,7 @@ export const App = () => {
             <button onClick={onLogout}>Logout</button>
           </p>
 
-          <Togglable buttonLabel="Create new blog">
+          <Togglable buttonLabel="Create new blog" ref={blogEditorRef}>
             <BlogEditor onCreate={onCreate} onNotify={onNotify} token={user.token} />
           </Togglable>
         </>
