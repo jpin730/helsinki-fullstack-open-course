@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const BlogEditor = ({ onCreate }) => {
+export const BlogForm = ({ onCreate }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')

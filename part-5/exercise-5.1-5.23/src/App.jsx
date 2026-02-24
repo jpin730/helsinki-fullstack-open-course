@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Blog } from './components/Blog'
-import { BlogEditor } from './components/BlogEditor'
+import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
@@ -18,7 +18,7 @@ export const App = () => {
   const [notification, setNotification] = useState(null)
 
   const notificationTimeoutRef = useRef()
-  const blogEditorRef = useRef()
+  const blogFormRef = useRef()
 
   useEffect(function fetchBlogs() {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -72,7 +72,7 @@ export const App = () => {
   const createBlog = async ({ title, author, url }) => {
     try {
       const blog = await blogService.create({ title, author, url }, user.token)
-      blogEditorRef.current.toggleVisibility()
+      blogFormRef.current.toggleVisibility()
       notify(`Blog "${blog.title}" created successfully`)
       setBlogs(blogs.concat(blog))
     } catch (error) {
@@ -102,8 +102,8 @@ export const App = () => {
             <button onClick={logout}>Logout</button>
           </p>
 
-          <Togglable label="Create new blog" ref={blogEditorRef}>
-            <BlogEditor onCreate={createBlog} />
+          <Togglable label="Create new blog" ref={blogFormRef}>
+            <BlogForm onCreate={createBlog} />
           </Togglable>
         </>
       )}
