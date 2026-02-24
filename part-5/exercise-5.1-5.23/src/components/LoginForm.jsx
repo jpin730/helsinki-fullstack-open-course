@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { useImperativeHandle, useState } from 'react'
 
-export const LoginForm = ({ onLogin }) => {
+export const LoginForm = ({ ref, onLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-
     onLogin({ username, password })
+  }
 
+  const reset = () => {
     setUsername('')
     setPassword('')
   }
 
+  useImperativeHandle(ref, () => {
+    return { reset }
+  })
+
   return (
     <>
       <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>
             Username

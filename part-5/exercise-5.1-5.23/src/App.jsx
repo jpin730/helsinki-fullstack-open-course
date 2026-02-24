@@ -18,7 +18,9 @@ export const App = () => {
   const [notification, setNotification] = useState(null)
 
   const notificationTimeoutRef = useRef()
+  const blogFormTogglableRef = useRef()
   const blogFormRef = useRef()
+  const loginFormRef = useRef()
 
   useEffect(function fetchBlogs() {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -61,6 +63,7 @@ export const App = () => {
   const login = async ({ username, password }) => {
     try {
       const user = await loginService.login({ username, password })
+      loginFormRef.current.reset()
       setUser(user)
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Login failed')
@@ -72,7 +75,8 @@ export const App = () => {
   const createBlog = async ({ title, author, url }) => {
     try {
       const blog = await blogService.create({ title, author, url }, user.token)
-      blogFormRef.current.toggleVisibility()
+      blogFormTogglableRef.current.toggleVisibility()
+      blogFormRef.current.reset()
       notify(`Blog "${blog.title}" created successfully`)
       setBlogs(blogs.concat(blog))
     } catch (error) {
@@ -88,7 +92,7 @@ export const App = () => {
 
       {!user && (
         <Togglable label="Login">
-          <LoginForm onLogin={login} />
+          <LoginForm onLogin={login} ref={loginFormRef} />
         </Togglable>
       )}
 
@@ -102,8 +106,8 @@ export const App = () => {
             <button onClick={logout}>Logout</button>
           </p>
 
-          <Togglable label="Create new blog" ref={blogFormRef}>
-            <BlogForm onCreate={createBlog} />
+          <Togglable label="Create new blog" ref={blogFormTogglableRef}>
+            <BlogForm onCreate={createBlog} ref={blogFormRef} />
           </Togglable>
         </>
       )}

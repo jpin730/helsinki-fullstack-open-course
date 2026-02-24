@@ -1,24 +1,29 @@
-import { useState } from 'react'
+import { useImperativeHandle, useState } from 'react'
 
-export const BlogForm = ({ onCreate }) => {
+export const BlogForm = ({ ref, onCreate }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleCreate = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-
     onCreate({ title, author, url })
+  }
 
+  const reset = () => {
     setTitle('')
     setAuthor('')
     setUrl('')
   }
 
+  useImperativeHandle(ref, () => {
+    return { reset }
+  })
+
   return (
     <>
       <h2>Create a new blog</h2>
-      <form onSubmit={handleCreate}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>
             Title
