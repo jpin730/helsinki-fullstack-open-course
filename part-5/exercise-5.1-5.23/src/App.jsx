@@ -10,12 +10,14 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
+const NOTIFICATION_TIME_SECONDS = 5
 
 export const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
 
+  const notificationTimeoutRef = useRef()
   const blogEditorRef = useRef()
 
   useEffect(function fetchBlogs() {
@@ -42,10 +44,16 @@ export const App = () => {
   )
 
   const notify = (message, isError = false) => {
+    if (notificationTimeoutRef.current) {
+      clearTimeout(notificationTimeoutRef.current)
+    }
+
     setNotification({ message, isError })
-    setTimeout(() => {
+
+    notificationTimeoutRef.current = setTimeout(() => {
       setNotification(null)
-    }, 5000)
+      notificationTimeoutRef.current = null
+    }, NOTIFICATION_TIME_SECONDS * 1000)
   }
 
   const notifyError = (message) => notify(message, true)
