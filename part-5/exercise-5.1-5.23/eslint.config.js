@@ -25,8 +25,17 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
+      'no-console': 'error',
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      // 'arrow-spacing': ['error', { before: true, after: true }], // Prettier handles with "arrowParens"
+      // 'linebreak-style': ['error', 'unix'], // Prettier handles with "endOfLine"
+      // 'no-trailing-spaces': 'error', // Prettier handles with "trailingComma"
+      // 'object-curly-spacing': ['error', 'always'], // Prettier handles with "bracketSpacing"
+      // indent: ['error', 2], // Prettier handles with "tabWidth"
+      // quotes: ['error', 'single'], // Prettier handles with "singleQuote"
+      // semi: ['error', 'never'], // Prettier handles with "semi"
     },
   },
 ]
