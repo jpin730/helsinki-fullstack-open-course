@@ -1,18 +1,21 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import { Blog } from './Blog'
 
+const MOCKED_BLOG = {
+  title: 'Test Blog',
+  author: 'John Doe',
+  url: 'https://example.com',
+  likes: 5,
+  user: {
+    name: 'Jane Smith',
+  },
+}
+
 test('renders content by default state', () => {
   // Arrange
-  const blog = {
-    title: 'Test Blog',
-    author: 'John Doe',
-    url: 'https://example.com',
-    likes: 5,
-    user: {
-      name: 'Jane Smith',
-    },
-  }
+  const blog = MOCKED_BLOG
 
   render(<Blog blog={blog} />)
 
@@ -20,16 +23,25 @@ test('renders content by default state', () => {
 
   // Assert
   const titleElement = screen.getByRole('heading', { level: 3 })
-  expect(titleElement).toBeDefined()
   expect(titleElement).toHaveTextContent('Test Blog')
   expect(titleElement).toHaveTextContent('John Doe')
 
-  const urlElement = screen.queryByText('https://example.com')
-  expect(urlElement).toBeNull()
+  expect(screen.queryByText('https://example.com')).not.toBeInTheDocument()
+  expect(screen.queryByText(/likes/)).not.toBeInTheDocument()
+  expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument()
+})
 
-  const likesElement = screen.queryByText('5 likes')
-  expect(likesElement).toBeNull()
+test('renders url, likes and user when view button is clicked', async () => {
+  // Arrange
+  const blog = MOCKED_BLOG
 
-  const userElement = screen.queryByText('Jane Smith')
-  expect(userElement).toBeNull()
+  render(<Blog blog={blog} />)
+
+  // Act
+  await userEvent.click(screen.getByRole('button', { name: 'view' }))
+
+  // Assert
+  expect(screen.queryByText('https://example.com')).toBeInTheDocument()
+  expect(screen.queryByText(/5 likes/)).toBeInTheDocument()
+  expect(screen.queryByText('Jane Smith')).toBeInTheDocument()
 })
