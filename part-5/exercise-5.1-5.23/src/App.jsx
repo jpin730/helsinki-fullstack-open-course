@@ -84,6 +84,21 @@ export const App = () => {
     }
   }
 
+  const likeBlog = async ({ id, user, likes, author, title, url }) => {
+    try {
+      await blogService.update(id, {
+        user: user.id,
+        likes: likes + 1,
+        author,
+        title,
+        url,
+      })
+      setBlogs(blogs.map((b) => (b.id === id ? { ...b, likes: b.likes + 1 } : b)))
+    } catch (error) {
+      notifyError(error.response?.data?.error ?? 'Liking blog failed')
+    }
+  }
+
   return (
     <>
       <h1>Blogs</h1>
@@ -112,11 +127,11 @@ export const App = () => {
         </>
       )}
 
-      <ul>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </ul>
+      <hr />
+
+      {blogs.map((blog) => (
+        <Blog key={blog.id} blog={blog} onLike={() => likeBlog(blog)} />
+      ))}
     </>
   )
 }
