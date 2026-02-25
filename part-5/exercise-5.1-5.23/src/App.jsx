@@ -50,6 +50,8 @@ export const App = () => {
       clearTimeout(notificationTimeoutRef.current)
     }
 
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
     setNotification({ message, isError })
 
     notificationTimeoutRef.current = setTimeout(() => {
@@ -86,7 +88,7 @@ export const App = () => {
 
   const likeBlog = async ({ id, user, likes, author, title, url }) => {
     try {
-      await blogService.update(id, {
+      await blogService.updateById(id, {
         user: user.id,
         likes: likes + 1,
         author,
@@ -100,6 +102,20 @@ export const App = () => {
       )
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Liking blog failed')
+    }
+  }
+
+  const deleteBlog = async ({ id, title, author }) => {
+    if (!confirm(`Remove blog "${title}" by ${author || 'UNKNOWN'}?`)) {
+      return
+    }
+
+    try {
+      await blogService.deleteById(id, user.token)
+      notify(`Blog "${title}" deleted successfully`)
+      setBlogs(blogs.filter((b) => b.id !== id))
+    } catch (error) {
+      notifyError(error.response?.data?.error ?? 'Deleting blog failed')
     }
   }
 
@@ -134,7 +150,13 @@ export const App = () => {
       <hr />
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} onLike={() => likeBlog(blog)} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          isOwner={blog.user?.username === user?.username}
+          onLike={() => likeBlog(blog)}
+          onDelete={() => deleteBlog(blog)}
+        />
       ))}
     </>
   )

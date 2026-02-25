@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const Blog = ({ blog, onLike }) => {
+export const Blog = ({ blog, isOwner, onLike, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const toggleButtonLabel = isExpanded ? 'hide' : 'view'
@@ -28,6 +28,11 @@ export const Blog = ({ blog, onLike }) => {
             <button onClick={onLike}>like</button>
           </p>
           <p>{blog.user?.name}</p>
+          {isOwner && (
+            <p>
+              <button onClick={onDelete}>remove</button>
+            </p>
+          )}
         </>
       )}
     </article>
