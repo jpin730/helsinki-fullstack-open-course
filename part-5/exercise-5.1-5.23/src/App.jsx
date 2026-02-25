@@ -23,7 +23,7 @@ export const App = () => {
   const loginFormRef = useRef()
 
   useEffect(function fetchBlogs() {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService.getAll().then((blogs) => setBlogs(blogs.toSorted((a, b) => b.likes - a.likes)))
   }, [])
 
   useEffect(function restoreUserSession() {
@@ -78,7 +78,7 @@ export const App = () => {
       blogFormTogglableRef.current.toggleVisibility()
       blogFormRef.current.reset()
       notify(`Blog "${blog.title}" created successfully`)
-      setBlogs(blogs.concat(blog))
+      setBlogs(blogs.concat(blog).toSorted((a, b) => b.likes - a.likes))
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Creating blog failed')
     }
@@ -93,7 +93,11 @@ export const App = () => {
         title,
         url,
       })
-      setBlogs(blogs.map((b) => (b.id === id ? { ...b, likes: b.likes + 1 } : b)))
+      setBlogs(
+        blogs
+          .map((b) => (b.id === id ? { ...b, likes: b.likes + 1 } : b))
+          .toSorted((a, b) => b.likes - a.likes),
+      )
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Liking blog failed')
     }
