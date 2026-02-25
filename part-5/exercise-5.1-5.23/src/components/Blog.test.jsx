@@ -46,4 +46,20 @@ describe('Blog', () => {
     expect(screen.queryByText(/5 likes/)).toBeInTheDocument()
     expect(screen.queryByText('Jane Smith')).toBeInTheDocument()
   })
+
+  it('calls the event handler twice when like button is clicked twice', async () => {
+    // Arrange
+    const blog = MOCKED_BLOG
+    const mockedOnLike = vi.fn()
+
+    render(<Blog blog={blog} onLike={mockedOnLike} />)
+
+    // Act
+    await userEvent.click(screen.getByRole('button', { name: 'view' }))
+    await userEvent.click(screen.getByRole('button', { name: 'like' }))
+    await userEvent.click(screen.getByRole('button', { name: 'like' }))
+
+    // Assert
+    expect(mockedOnLike).toHaveBeenCalledTimes(2)
+  })
 })
