@@ -1,7 +1,17 @@
 const { test, describe, beforeEach, expect } = require('@playwright/test')
 
 describe('Blog app', () => {
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ page, request }) => {
+    await request.post('http://localhost:3003/api/testing/reset')
+
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name: 'Test User',
+        username: 'testuser',
+        password: 'testpass',
+      },
+    })
+
     await page.goto('http://localhost:5173')
   })
 
@@ -12,19 +22,19 @@ describe('Blog app', () => {
 
   test('user can log in', async ({ page }) => {
     await page.getByRole('button', { name: 'login' }).click()
-    await page.getByRole('textbox', { name: 'Username' }).fill('root')
-    await page.getByRole('textbox', { name: 'Password' }).fill('sekret')
+    await page.getByRole('textbox', { name: 'Username' }).fill('testuser')
+    await page.getByRole('textbox', { name: 'Password' }).fill('testpass')
     await page.getByRole('button', { name: 'login' }).click()
 
-    const locator = page.getByText('root logged in')
+    const locator = page.getByText('Test User logged in')
     await expect(locator).toBeVisible()
   })
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.getByRole('button', { name: 'login' }).click()
-      await page.getByRole('textbox', { name: 'Username' }).fill('root')
-      await page.getByRole('textbox', { name: 'Password' }).fill('sekret')
+      await page.getByRole('textbox', { name: 'Username' }).fill('testuser')
+      await page.getByRole('textbox', { name: 'Password' }).fill('testpass')
       await page.getByRole('button', { name: 'login' }).click()
     })
 
