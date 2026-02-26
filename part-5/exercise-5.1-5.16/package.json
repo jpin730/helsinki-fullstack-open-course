@@ -7,7 +7,7 @@
     "build": "vite build",
     "dev": "vite",
     "lint": "eslint .",
-    "prepare": "cd ../.. && husky part-5/exercise-5.1-5.23/.husky",
+    "prepare": "cd ../.. && husky part-5/exercise-5.1-5.16/.husky",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
