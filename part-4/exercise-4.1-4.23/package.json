@@ -7,10 +7,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development node --watch index.js",
-    "test": "cross-env NODE_ENV=testing node --test --test-concurrency=1",
-    "prepare": "cd ../.. && husky part-4/exercise-4.1-4.23/.husky"
+    "prepare": "cd ../.. && husky part-4/exercise-4.1-4.23/.husky",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "start:test": "cross-env NODE_ENV=testing node --watch index.js",
+    "test": "cross-env NODE_ENV=testing node --test --test-concurrency=1"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
