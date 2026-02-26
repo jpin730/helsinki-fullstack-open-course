@@ -84,9 +84,15 @@ describe('Blog app', () => {
 
       test('one of those blogs can be liked', async ({ page }) => {
         const blogContainer = page.getByRole('article').filter({ hasText: 'blog 1 playwright' })
-        await page.pause()
+
         await blogContainer.getByRole('button', { name: 'view' }).click()
+
+        const responsePromise = page.waitForResponse(
+          (response) =>
+            response.url().includes('/api/blogs') && response.request().method() === 'PUT',
+        )
         await blogContainer.getByRole('button', { name: 'like' }).click()
+        await responsePromise
 
         await expect(blogContainer.getByText('1 likes')).toBeVisible()
       })
