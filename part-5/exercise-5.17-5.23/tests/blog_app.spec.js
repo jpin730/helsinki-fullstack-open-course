@@ -63,6 +63,9 @@ describe('Blog app', () => {
       await expect(
         page.getByText('Blog "a blog created by playwright" created successfully'),
       ).toBeVisible()
+      await expect(
+        page.getByRole('article').filter({ hasText: 'a blog created by playwright playwright' }),
+      ).toBeVisible()
     })
 
     describe('and several blogs exists', () => {
