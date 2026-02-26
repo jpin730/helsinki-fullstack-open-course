@@ -4,10 +4,15 @@ import json from '@eslint/json'
 import markdown from '@eslint/markdown'
 import { defineConfig } from 'eslint/config'
 import prettier from 'eslint-plugin-prettier/recommended'
+import { includeIgnoreFile } from '@eslint/compat'
+import path from 'node:path'
+
+const gitignorePath = path.resolve(import.meta.dirname, '.gitignore')
 
 export default defineConfig([
   prettier,
-  { ignores: ['playwright-report', 'package-lock.json'] },
+  includeIgnoreFile(gitignorePath),
+  { ignores: ['package-lock.json'] },
   {
     files: ['**/*.{js,mjs,cjs}'],
     plugins: { js },
