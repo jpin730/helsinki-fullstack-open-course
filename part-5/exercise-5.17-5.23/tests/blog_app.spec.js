@@ -21,6 +21,14 @@ describe('Blog app', () => {
     await expect(page.getByText('Blogs')).toBeVisible()
   })
 
+  test('Login form is shown', async ({ page }) => {
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await expect(page.getByRole('textbox', { name: 'Username' })).toBeVisible()
+    await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'login' })).toBeVisible()
+  })
+
   test('user can log in', async ({ page }) => {
     await loginWith(page, 'testuser', 'testpass')
 
