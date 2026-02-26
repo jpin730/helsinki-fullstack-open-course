@@ -16,8 +16,7 @@ describe('Blog app', () => {
   })
 
   test('front page can be opened', async ({ page }) => {
-    const locator = page.getByText('Blogs')
-    await expect(locator).toBeVisible()
+    await expect(page.getByText('Blogs')).toBeVisible()
   })
 
   test('user can log in', async ({ page }) => {
@@ -26,8 +25,7 @@ describe('Blog app', () => {
     await page.getByRole('textbox', { name: 'Password' }).fill('testpass')
     await page.getByRole('button', { name: 'login' }).click()
 
-    const locator = page.getByText('Test User logged in')
-    await expect(locator).toBeVisible()
+    await expect(page.getByText('Test User logged in')).toBeVisible()
   })
 
   describe('when logged in', () => {
@@ -48,6 +46,23 @@ describe('Blog app', () => {
       await expect(
         page.getByText('Blog "a blog created by playwright" created successfully'),
       ).toBeVisible()
+    })
+
+    describe('and a blog exists', () => {
+      beforeEach(async ({ page }) => {
+        await page.getByRole('button', { name: 'new blog' }).click()
+        await page.getByRole('textbox', { name: 'Title' }).fill('a blog created by playwright')
+        await page.getByRole('textbox', { name: 'Author' }).fill('playwright')
+        await page.getByRole('textbox', { name: 'URL' }).fill('http://example.com')
+        await page.getByRole('button', { name: 'create' }).click()
+      })
+
+      test('it can be liked', async ({ page }) => {
+        await page.getByRole('button', { name: 'view' }).click()
+        await page.getByRole('button', { name: 'like' }).click()
+
+        await expect(page.getByText('1 likes')).toBeVisible()
+      })
     })
   })
 })
