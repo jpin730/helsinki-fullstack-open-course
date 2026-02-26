@@ -29,21 +29,23 @@ describe('Blog app', () => {
     await expect(page.getByRole('button', { name: 'login' })).toBeVisible()
   })
 
-  test('user can log in', async ({ page }) => {
-    await loginWith(page, 'testuser', 'testpass')
+  describe('Login', () => {
+    test('succeeds with correct credentials', async ({ page }) => {
+      await loginWith(page, 'testuser', 'testpass')
 
-    await expect(page.getByText('Test User logged in')).toBeVisible()
-  })
+      await expect(page.getByText('Test User logged in')).toBeVisible()
+    })
 
-  test('login fails with wrong password', async ({ page }) => {
-    await loginWith(page, 'testuser', 'wrongpass')
+    test('fails with wrong credentials', async ({ page }) => {
+      await loginWith(page, 'testuser', 'wrongpass')
 
-    const notification = page.getByText('invalid username or password')
-    await expect(notification).toBeVisible()
-    await expect(notification).toHaveCSS('border', '2px solid rgb(255, 0, 0)')
-    await expect(notification).toHaveCSS('color', 'rgb(255, 0, 0)')
+      const notification = page.getByText('invalid username or password')
+      await expect(notification).toBeVisible()
+      await expect(notification).toHaveCSS('border', '2px solid rgb(255, 0, 0)')
+      await expect(notification).toHaveCSS('color', 'rgb(255, 0, 0)')
 
-    await expect(page.getByText('Test User logged in')).not.toBeVisible()
+      await expect(page.getByText('Test User logged in')).not.toBeVisible()
+    })
   })
 
   describe('when logged in', () => {
