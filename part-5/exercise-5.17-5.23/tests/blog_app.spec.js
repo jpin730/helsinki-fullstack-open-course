@@ -90,6 +90,21 @@ describe('Blog app', () => {
 
         await expect(blogContainer.getByText('1 likes')).toBeVisible()
       })
+
+      test('one of those blogs can be deleted by the user who created it', async ({ page }) => {
+        const blogContainer = page.getByRole('article').filter({ hasText: 'blog 1 playwright' })
+        await blogContainer.getByRole('button', { name: 'view' }).click()
+
+        page.once('dialog', async (dialog) => {
+          expect(dialog.message()).toBe('Remove blog "blog 1" by playwright?')
+          await dialog.accept()
+        })
+
+        await blogContainer.getByRole('button', { name: 'remove' }).click()
+
+        await page.getByText('Blog "blog 1" deleted successfully').waitFor()
+        await expect(blogContainer).not.toBeVisible()
+      })
     })
   })
 })
