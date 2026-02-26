@@ -1,10 +1,12 @@
 const { test, describe, beforeEach, expect } = require('@playwright/test')
 
+const { loginWith, createBlog } = require('./helper')
+
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
-    await request.post('http://localhost:3003/api/testing/reset')
+    await request.post('/api/testing/reset')
 
-    await request.post('http://localhost:3003/api/users', {
+    await request.post('/api/users', {
       data: {
         name: 'Test User',
         username: 'testuser',
@@ -12,7 +14,7 @@ describe('Blog app', () => {
       },
     })
 
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
   })
 
   test('front page can be opened', async ({ page }) => {
@@ -20,19 +22,13 @@ describe('Blog app', () => {
   })
 
   test('user can log in', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
-    await page.getByRole('textbox', { name: 'Username' }).fill('testuser')
-    await page.getByRole('textbox', { name: 'Password' }).fill('testpass')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'testuser', 'testpass')
 
     await expect(page.getByText('Test User logged in')).toBeVisible()
   })
 
   test('login fails with wrong password', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
-    await page.getByRole('textbox', { name: 'Username' }).fill('testuser')
-    await page.getByRole('textbox', { name: 'Password' }).fill('wrongpass')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'testuser', 'wrongpass')
 
     const notification = page.getByText('invalid username or password')
     await expect(notification).toBeVisible()
@@ -44,18 +40,15 @@ describe('Blog app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole('button', { name: 'login' }).click()
-      await page.getByRole('textbox', { name: 'Username' }).fill('testuser')
-      await page.getByRole('textbox', { name: 'Password' }).fill('testpass')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'testuser', 'testpass')
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'new blog' }).click()
-      await page.getByRole('textbox', { name: 'Title' }).fill('a blog created by playwright')
-      await page.getByRole('textbox', { name: 'Author' }).fill('playwright')
-      await page.getByRole('textbox', { name: 'URL' }).fill('http://example.com')
-      await page.getByRole('button', { name: 'create' }).click()
+      await createBlog(page, {
+        title: 'a blog created by playwright',
+        author: 'playwright',
+        url: 'http://example.com',
+      })
 
       await expect(
         page.getByText('Blog "a blog created by playwright" created successfully'),
@@ -64,11 +57,11 @@ describe('Blog app', () => {
 
     describe('and a blog exists', () => {
       beforeEach(async ({ page }) => {
-        await page.getByRole('button', { name: 'new blog' }).click()
-        await page.getByRole('textbox', { name: 'Title' }).fill('a blog created by playwright')
-        await page.getByRole('textbox', { name: 'Author' }).fill('playwright')
-        await page.getByRole('textbox', { name: 'URL' }).fill('http://example.com')
-        await page.getByRole('button', { name: 'create' }).click()
+        await createBlog(page, {
+          title: 'a blog created by playwright',
+          author: 'playwright',
+          url: 'http://example.com',
+        })
       })
 
       test('it can be liked', async ({ page }) => {
