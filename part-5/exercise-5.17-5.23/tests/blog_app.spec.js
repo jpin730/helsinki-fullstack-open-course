@@ -28,6 +28,20 @@ describe('Blog app', () => {
     await expect(page.getByText('Test User logged in')).toBeVisible()
   })
 
+  test('login fails with wrong password', async ({ page }) => {
+    await page.getByRole('button', { name: 'login' }).click()
+    await page.getByRole('textbox', { name: 'Username' }).fill('testuser')
+    await page.getByRole('textbox', { name: 'Password' }).fill('wrongpass')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    const notification = page.getByText('invalid username or password')
+    await expect(notification).toBeVisible()
+    await expect(notification).toHaveCSS('border', '2px solid rgb(255, 0, 0)')
+    await expect(notification).toHaveCSS('color', 'rgb(255, 0, 0)')
+
+    await expect(page.getByText('Test User logged in')).not.toBeVisible()
+  })
+
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.getByRole('button', { name: 'login' }).click()
