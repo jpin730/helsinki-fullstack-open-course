@@ -1,16 +1,16 @@
-const { test, describe, expect } = require('@playwright/test')
+const { test, describe, beforeEach, expect } = require('@playwright/test')
 
 describe('Blog app', () => {
-  test('front page can be opened', async ({ page }) => {
+  beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173')
+  })
 
+  test('front page can be opened', async ({ page }) => {
     const locator = page.getByText('Blogs')
     await expect(locator).toBeVisible()
   })
 
   test('user can log in', async ({ page }) => {
-    await page.goto('http://localhost:5173')
-
     await page.getByRole('button', { name: 'login' }).click()
     await page.getByRole('textbox', { name: 'Username' }).fill('root')
     await page.getByRole('textbox', { name: 'Password' }).fill('sekret')
