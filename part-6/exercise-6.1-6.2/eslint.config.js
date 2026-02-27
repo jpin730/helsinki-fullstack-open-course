@@ -3,15 +3,17 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import prettier from 'eslint-plugin-prettier/recommended'
 
 export default defineConfig([
+  prettier,
   globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite
+      reactRefresh.configs.vite,
     ],
     languageOptions: {
       ecmaVersion: 2020,
@@ -19,15 +21,12 @@ export default defineConfig([
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
-        sourceType: 'module'
-      }
+        sourceType: 'module',
+      },
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true }
-      ]
-    }
-  }
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    },
+  },
 ])
