@@ -19,9 +19,28 @@ const App = () => {
         <button onClick={dispatchAction(CounterActionTypes.Reset)}>reset stats</button>
       </p>
 
-      <p>good {good}</p>
-      <p>ok {ok}</p>
-      <p>bad {bad}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>good</td>
+            <td>{good}</td>
+          </tr>
+          <tr>
+            <td>ok</td>
+            <td>{ok}</td>
+          </tr>
+          <tr>
+            <td>bad</td>
+            <td>{bad}</td>
+          </tr>
+        </tbody>
+      </table>
     </main>
   )
 }
