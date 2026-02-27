@@ -87,14 +87,42 @@ describe('Blog app', () => {
 
         await blogContainer.getByRole('button', { name: 'view' }).click()
 
-        const responsePromise = page.waitForResponse(
-          (response) =>
-            response.url().includes('/api/blogs') && response.request().method() === 'PUT',
+        const response = page.waitForResponse(
+          (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
         )
         await blogContainer.getByRole('button', { name: 'like' }).click()
-        await responsePromise
+        await response
 
         await expect(blogContainer.getByText('1 likes')).toBeVisible()
+      })
+
+      test('blogs are arranged in order according to likes, most likes first', async ({ page }) => {
+        // Like blog 2 twice
+        const blog2Container = page.getByRole('article').filter({ hasText: 'blog 2 playwright' })
+        await blog2Container.getByRole('button', { name: 'view' }).click()
+
+        for (let i = 0; i < 2; i++) {
+          const response = page.waitForResponse(
+            (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
+          )
+          await blog2Container.getByRole('button', { name: 'like' }).click()
+          await response
+        }
+
+        // Like blog 1 once
+        const blog1Container = page.getByRole('article').filter({ hasText: 'blog 1 playwright' })
+        await blog1Container.getByRole('button', { name: 'view' }).click()
+
+        const response = page.waitForResponse(
+          (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
+        )
+        await blog1Container.getByRole('button', { name: 'like' }).click()
+        await response
+
+        // blog 2 (2 likes) should appear before blog 1 (1 like)
+        const articles = page.getByRole('article')
+        await expect(articles.nth(0)).toContainText('blog 2')
+        await expect(articles.nth(1)).toContainText('blog 1')
       })
 
       test('one of those blogs can be deleted by the user who created it', async ({ page }) => {
@@ -104,12 +132,12 @@ describe('Blog app', () => {
         page.once('dialog', async (dialog) => {
           expect(dialog.message()).toBe('Remove blog "blog 1" by playwright?')
           await dialog.accept()
+
+          await blogContainer.getByRole('button', { name: 'remove' }).click()
+
+          await expect(page.getByText('Blog "blog 1" deleted successfully')).toBeVisible()
+          await expect(blogContainer).not.toBeVisible()
         })
-
-        await blogContainer.getByRole('button', { name: 'remove' }).click()
-
-        await page.getByText('Blog "blog 1" deleted successfully').waitFor()
-        await expect(blogContainer).not.toBeVisible()
       })
     })
   })
