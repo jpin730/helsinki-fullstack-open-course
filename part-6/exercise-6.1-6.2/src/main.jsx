@@ -1,24 +1,27 @@
 import ReactDOM from 'react-dom/client'
 import { createStore } from 'redux'
-import counterReducer from './reducers/counterReducer'
+import { CounterActionTypes, counterReducer } from './reducers/counterReducer'
 
 const store = createStore(counterReducer)
 
-// TODO
 // eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
+  const { good, ok, bad } = store.getState()
+
+  const dispatchAction = (type) => () => store.dispatch({ type })
+
   return (
     <main>
       <p>
-        <button onClick={() => store.dispatch({ type: 'GOOD' })}>good</button>
-        <button>ok</button>
-        <button>bad</button>
-        <button>reset stats</button>
+        <button onClick={dispatchAction(CounterActionTypes.Good)}>good</button>
+        <button onClick={dispatchAction(CounterActionTypes.Ok)}>ok</button>
+        <button onClick={dispatchAction(CounterActionTypes.Bad)}>bad</button>
+        <button onClick={dispatchAction(CounterActionTypes.Reset)}>reset stats</button>
       </p>
 
-      <p>good {store.getState().good}</p>
-      <p>ok </p>
-      <p>bad </p>
+      <p>good {good}</p>
+      <p>ok {ok}</p>
+      <p>bad {bad}</p>
     </main>
   )
 }
