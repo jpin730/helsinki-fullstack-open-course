@@ -4,17 +4,22 @@ import counterReducer from './reducers/counterReducer'
 
 const store = createStore(counterReducer)
 
+// TODO
+// eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
   return (
-    <div>
-      <button onClick={() => store.dispatch({ type: 'GOOD' })}>good</button>
-      <button>ok</button>
-      <button>bad</button>
-      <button>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok</div>
-      <div>bad</div>
-    </div>
+    <main>
+      <p>
+        <button onClick={() => store.dispatch({ type: 'GOOD' })}>good</button>
+        <button>ok</button>
+        <button>bad</button>
+        <button>reset stats</button>
+      </p>
+
+      <p>good {store.getState().good}</p>
+      <p>ok </p>
+      <p>bad </p>
+    </main>
   )
 }
 
