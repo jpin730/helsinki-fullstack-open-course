@@ -1,6 +1,6 @@
 const { test, describe, beforeEach, expect } = require('@playwright/test')
 
-const { loginWith, createBlog } = require('./helper')
+const { loginWith, createBlog, likeBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -84,42 +84,22 @@ describe('Blog app', () => {
 
       test('one of those blogs can be liked', async ({ page }) => {
         const blogContainer = page.getByRole('article').filter({ hasText: 'blog 1 playwright' })
-
         await blogContainer.getByRole('button', { name: 'view' }).click()
-
-        const response = page.waitForResponse(
-          (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
-        )
-        await blogContainer.getByRole('button', { name: 'like' }).click()
-        await response
+        await likeBlog(blogContainer)
 
         await expect(blogContainer.getByText('1 likes')).toBeVisible()
       })
 
       test('blogs are arranged in order according to likes, most likes first', async ({ page }) => {
-        // Like blog 2 twice
         const blog2Container = page.getByRole('article').filter({ hasText: 'blog 2 playwright' })
         await blog2Container.getByRole('button', { name: 'view' }).click()
+        await likeBlog(blog2Container)
+        await likeBlog(blog2Container)
 
-        for (let i = 0; i < 2; i++) {
-          const response = page.waitForResponse(
-            (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
-          )
-          await blog2Container.getByRole('button', { name: 'like' }).click()
-          await response
-        }
-
-        // Like blog 1 once
         const blog1Container = page.getByRole('article').filter({ hasText: 'blog 1 playwright' })
         await blog1Container.getByRole('button', { name: 'view' }).click()
+        await likeBlog(blog1Container)
 
-        const response = page.waitForResponse(
-          (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
-        )
-        await blog1Container.getByRole('button', { name: 'like' }).click()
-        await response
-
-        // blog 2 (2 likes) should appear before blog 1 (1 like)
         const articles = page.getByRole('article')
         await expect(articles.nth(0)).toContainText('blog 2')
         await expect(articles.nth(1)).toContainText('blog 1')

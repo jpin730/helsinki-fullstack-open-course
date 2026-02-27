@@ -13,4 +13,14 @@ const createBlog = async (page, { title, author, url }) => {
   await page.getByRole('button', { name: 'create' }).click()
 }
 
-module.exports = { loginWith, createBlog }
+const likeBlog = async (blogContainer) => {
+  const page = blogContainer.page()
+
+  const response = page.waitForResponse(
+    (res) => res.url().includes('/api/blogs') && res.request().method() === 'PUT',
+  )
+  await blogContainer.getByRole('button', { name: 'like' }).click()
+  await response
+}
+
+module.exports = { loginWith, createBlog, likeBlog }
