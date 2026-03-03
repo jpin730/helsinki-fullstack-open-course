@@ -10,24 +10,31 @@ export const App = () => {
   }
 
   return (
-    <div>
+    <main>
       <h2>Anecdotes</h2>
+
+      <hr />
+
       {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes}
+          <p>{anecdote.content}</p>
+          <p>
+            <span>has {anecdote.votes}</span>&nbsp;
             <button onClick={() => vote(anecdote.id)}>vote</button>
-          </div>
+          </p>
         </div>
       ))}
-      <h2>create new</h2>
+
+      <hr />
+
+      <h2>Create new</h2>
+
       <form>
-        <div>
+        <p>
           <input />
-        </div>
-        <button>create</button>
+        </p>
+        <button>Create</button>
       </form>
-    </div>
+    </main>
   )
 }
