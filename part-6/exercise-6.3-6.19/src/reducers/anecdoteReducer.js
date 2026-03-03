@@ -1,4 +1,4 @@
-const anecdotesAtStart = [
+const ANECDOTES_AT_START = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
   'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
@@ -17,12 +17,22 @@ const asObject = (anecdote) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
+const INITIAL_STATE = ANECDOTES_AT_START.map(asObject)
 
-export const anecdoteReducer = (state = initialState, action) => {
-  // TODO: handle actions
-  // eslint-disable-next-line no-console
-  console.log(action)
-
-  return state
+export const AnecdoteActionTypes = {
+  Vote: 'VOTE',
 }
+
+export const anecdoteReducer = (state = INITIAL_STATE, action) => {
+  switch (action.type) {
+    case AnecdoteActionTypes.Vote:
+      return state.map((a) => (a.id === action.payload.id ? { ...a, votes: a.votes + 1 } : a))
+    default:
+      return state
+  }
+}
+
+export const voteAnecdote = (id) => ({
+  type: AnecdoteActionTypes.Vote,
+  payload: { id },
+})

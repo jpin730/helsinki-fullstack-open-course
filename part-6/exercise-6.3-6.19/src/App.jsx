@@ -1,13 +1,11 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { voteAnecdote } from './reducers/anecdoteReducer'
 
 export const App = () => {
+  const dispatch = useDispatch()
   const anecdotes = useSelector((state) => state)
 
-  const vote = (id) => {
-    // TODO: dispatch an action to update the store
-    // eslint-disable-next-line no-console
-    console.log('vote', id)
-  }
+  const vote = (id) => () => dispatch(voteAnecdote(id))
 
   return (
     <main>
@@ -19,8 +17,8 @@ export const App = () => {
         <div key={anecdote.id}>
           <p>{anecdote.content}</p>
           <p>
-            <span>has {anecdote.votes}</span>&nbsp;
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <span>Has {anecdote.votes}</span>&nbsp;
+            <button onClick={vote(anecdote.id)}>Vote</button>
           </p>
         </div>
       ))}
