@@ -21,7 +21,7 @@ export const AnecdoteList = () => {
     return filteredAnecdotes.toSorted((a, b) => b.votes - a.votes)
   })
 
-  const handleVote = (id) => () => dispatch(voteAnecdote(id))
+  const handleVote = (id) => () => dispatch(voteAnecdote({ id }))
 
   return (
     <>
