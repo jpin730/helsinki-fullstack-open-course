@@ -1,10 +1,12 @@
 import js from '@eslint/js'
-import globals from 'globals'
+import prettier from 'eslint-plugin-prettier/recommended'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import globals from 'globals'
 
 export default defineConfig([
+  prettier,
   globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
@@ -23,6 +25,7 @@ export default defineConfig([
       },
     },
     rules: {
+      'no-console': 'error',
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
