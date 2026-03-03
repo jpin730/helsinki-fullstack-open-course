@@ -21,12 +21,15 @@ const INITIAL_STATE = ANECDOTES_AT_START.map(asObject)
 
 export const AnecdoteActionTypes = {
   Vote: 'VOTE',
+  Create: 'CREATE',
 }
 
 export const anecdoteReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case AnecdoteActionTypes.Vote:
       return state.map((a) => (a.id === action.payload.id ? { ...a, votes: a.votes + 1 } : a))
+    case AnecdoteActionTypes.Create:
+      return [...state, asObject(action.payload.content)]
     default:
       return state
   }
@@ -35,4 +38,9 @@ export const anecdoteReducer = (state = INITIAL_STATE, action) => {
 export const voteAnecdote = (id) => ({
   type: AnecdoteActionTypes.Vote,
   payload: { id },
+})
+
+export const createAnecdote = (content) => ({
+  type: AnecdoteActionTypes.Create,
+  payload: { content },
 })
