@@ -1,16 +1,18 @@
 import { useSelector } from 'react-redux'
 
-const App = () => {
-  const anecdotes = useSelector(state => state)
+export const App = () => {
+  const anecdotes = useSelector((state) => state)
 
-  const vote = id => {
+  const vote = (id) => {
+    // TODO: dispatch an action to update the store
+    // eslint-disable-next-line no-console
     console.log('vote', id)
   }
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote => (
+      {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
@@ -29,5 +31,3 @@ const App = () => {
     </div>
   )
 }
-
-export default App
