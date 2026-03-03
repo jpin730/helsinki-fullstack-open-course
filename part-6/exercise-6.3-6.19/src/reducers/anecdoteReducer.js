@@ -19,7 +19,7 @@ const asObject = (anecdote) => {
 
 const INITIAL_STATE = ANECDOTES_AT_START.map(asObject)
 
-export const AnecdoteActionTypes = {
+const AnecdoteActionTypes = {
   Vote: 'VOTE',
   Create: 'CREATE',
 }

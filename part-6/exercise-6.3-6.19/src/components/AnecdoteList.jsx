@@ -14,7 +14,12 @@ const Anecdote = ({ anecdote, onVote }) => (
 export const AnecdoteList = () => {
   const dispatch = useDispatch()
 
-  const anecdotes = useSelector((state) => [...state].sort((a, b) => b.votes - a.votes))
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    const filteredAnecdotes = anecdotes.filter((anecdote) =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase()),
+    )
+    return filteredAnecdotes.toSorted((a, b) => b.votes - a.votes)
+  })
 
   const handleVote = (id) => () => dispatch(voteAnecdote(id))
 
