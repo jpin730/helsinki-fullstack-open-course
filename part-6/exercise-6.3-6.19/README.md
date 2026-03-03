@@ -12,6 +12,12 @@ Install the dependencies:
 npm install
 ```
 
+Start the backend server that uses Json Server:
+
+```bash
+npm run server
+```
+
 Start the frontend development server:
 
 ```bash
