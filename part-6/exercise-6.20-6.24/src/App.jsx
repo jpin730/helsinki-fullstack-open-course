@@ -1,7 +1,7 @@
-import AnecdoteForm from './components/AnecdoteForm'
-import Notification from './components/Notification'
+import { AnecdoteForm } from './components/AnecdoteForm'
+import { Notification } from './components/Notification'
 
-const App = () => {
+export const App = () => {
   const handleVote = (anecdote) => {
     console.log('vote')
   }
@@ -33,5 +33,3 @@ const App = () => {
     </div>
   )
 }
-
-export default App

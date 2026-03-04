@@ -1,4 +1,4 @@
-const AnecdoteForm = () => {
+export const AnecdoteForm = () => {
   const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
@@ -16,5 +16,3 @@ const AnecdoteForm = () => {
     </div>
   )
 }
-
-export default AnecdoteForm
