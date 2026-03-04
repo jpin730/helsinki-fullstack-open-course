@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
     "lint": "eslint .",
+    "prepare": "cd ../.. && husky part-6/exercise-6.20-6.24/.husky",
     "preview": "vite preview",
     "server": "node server.js"
   },
@@ -21,9 +22,18 @@
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.2",
+    "prettier": "3.8.1",
     "vite": "^7.1.7"
+  },
+  "lint-staged": {
+    "*": "npx prettier --write --ignore-unknown",
+    "**/*.{js,jsx}": "npx eslint --fix"
   }
 }
