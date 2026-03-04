@@ -1,3 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
+import { getAllAnecdotes } from '../services/anecdotes'
+
 const Anecdote = ({ anecdote }) => {
   const handleVote = (anecdote) => () => {}
 
@@ -12,5 +15,17 @@ const Anecdote = ({ anecdote }) => {
   )
 }
 
-export const AnecdoteList = ({ anecdotes }) =>
-  anecdotes.map((anecdote) => <Anecdote key={anecdote.id} anecdote={anecdote} />)
+export const AnecdoteList = () => {
+  const result = useQuery({
+    queryKey: ['anecdotes'],
+    queryFn: getAllAnecdotes,
+  })
+
+  if (result.isLoading) {
+    return <blockquote>Loading data...</blockquote>
+  }
+
+  const anecdotes = result.data
+
+  return anecdotes.map((anecdote) => <Anecdote key={anecdote.id} anecdote={anecdote} />)
+}
