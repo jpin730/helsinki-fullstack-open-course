@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+
 import { getAllAnecdotes } from '../services/anecdotes'
 
 const Anecdote = ({ anecdote }) => {
@@ -16,16 +17,18 @@ const Anecdote = ({ anecdote }) => {
 }
 
 export const AnecdoteList = () => {
-  const result = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ['anecdotes'],
     queryFn: getAllAnecdotes,
   })
 
-  if (result.isLoading) {
+  if (isPending) {
     return <blockquote>Loading data...</blockquote>
   }
 
-  const anecdotes = result.data
+  if (isError) {
+    return <blockquote>Anecdotes service not available due to problems in server</blockquote>
+  }
 
-  return anecdotes.map((anecdote) => <Anecdote key={anecdote.id} anecdote={anecdote} />)
+  return data.map((anecdote) => <Anecdote key={anecdote.id} anecdote={anecdote} />)
 }
