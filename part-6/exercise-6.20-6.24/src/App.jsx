@@ -1,4 +1,5 @@
 import { AnecdoteForm } from './components/AnecdoteForm'
+import { AnecdoteList } from './components/AnecdoteList'
 import { Notification } from './components/Notification'
 
 export const App = () => {
@@ -15,21 +16,13 @@ export const App = () => {
   ]
 
   return (
-    <div>
-      <h3>Anecdote app</h3>
-
+    <main>
+      <h1>Anecdote app</h1>
       <Notification />
+      <hr />
       <AnecdoteForm />
-
-      {anecdotes.map((anecdote) => (
-        <div key={anecdote.id}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>vote</button>
-          </div>
-        </div>
-      ))}
-    </div>
+      <hr />
+      <AnecdoteList anecdotes={anecdotes} />
+    </main>
   )
 }
