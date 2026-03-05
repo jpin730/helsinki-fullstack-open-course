@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Route, Routes, useMatch, useNavigate } from 'react-router'
 
 import { About } from './components/About'
@@ -7,29 +7,19 @@ import { AnecdoteList } from './components/AnecdoteList'
 import { CreateNew } from './components/CreateNew'
 import { Footer } from './components/Footer'
 import { Menu } from './components/Menu'
+import { Notification } from './components/Notification'
+import { ANECDOTES } from './const/anecdotes'
 import { Path } from './const/path'
+
+const NOTIFICATION_TIMEOUT_IN_SECONDS = 5
 
 export const App = () => {
   const navigate = useNavigate()
 
-  const [anecdotes, setAnecdotes] = useState([
-    {
-      content: 'If it hurts, do it more often',
-      author: 'Jez Humble',
-      info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-      votes: 0,
-      id: 1,
-    },
-    {
-      content: 'Premature optimization is the root of all evil',
-      author: 'Donald Knuth',
-      info: 'http://wiki.c2.com/?PrematureOptimization',
-      votes: 0,
-      id: 2,
-    },
-  ])
+  const [anecdotes, setAnecdotes] = useState(ANECDOTES)
+  const [notification, setNotification] = useState(null)
 
-  const [notification, setNotification] = useState('')
+  const notificationTimeoutRef = useRef(null)
 
   const anecdoteWithIdMatch = useMatch(Path.AnecdoteWithId)
 
@@ -41,10 +31,23 @@ export const App = () => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
     navigate(Path.Anecdotes)
+    notify(`A new anecdote "${anecdote.content}" created!`)
   }
 
   const vote = (id) => {
     setAnecdotes(anecdotes.map((a) => (a.id === id ? { ...a, votes: a.votes + 1 } : a)))
+  }
+
+  const notify = (message) => {
+    if (notificationTimeoutRef.current) {
+      clearTimeout(notificationTimeoutRef.current)
+    }
+
+    setNotification(message)
+
+    notificationTimeoutRef.current = setTimeout(() => {
+      setNotification(null)
+    }, NOTIFICATION_TIMEOUT_IN_SECONDS * 1000)
   }
 
   return (
@@ -52,6 +55,8 @@ export const App = () => {
       <h1>Software anecdotes</h1>
 
       <Menu />
+
+      <Notification notification={notification} />
 
       <hr />
 
