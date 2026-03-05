@@ -1,8 +1,19 @@
-# React + Vite
+# Exercise 7.1-7.6
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple anecdotes frontend from a [template](https://github.com/fullstack-hy2020/routed-anecdotes) that provides a minimal setup to get React working in Vite with HMR.
 
-Currently, two official plugins are available:
+## How to Run the App
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To run this app, follow these steps:
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the frontend development server:
+
+```bash
+npm run dev
+```
