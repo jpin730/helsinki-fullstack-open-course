@@ -1,15 +1,29 @@
+import { NavLink } from 'react-router'
+
+import { Path } from '../const/path'
+
 export const Menu = () => {
+  const getActiveStyle = ({ isActive }) => ({
+    fontWeight: isActive ? 'bold' : 'normal',
+  })
+
   return (
     <nav>
       <ul>
         <li>
-          <a href="#">anecdotes</a>
+          <NavLink to={Path.Anecdotes} style={getActiveStyle}>
+            Anecdotes
+          </NavLink>
         </li>
         <li>
-          <a href="#">create new</a>
+          <NavLink to={Path.CreateNew} style={getActiveStyle}>
+            Create New
+          </NavLink>
         </li>
         <li>
-          <a href="#">about</a>
+          <NavLink to={Path.About} style={getActiveStyle}>
+            About
+          </NavLink>
         </li>
       </ul>
     </nav>

@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { Route, Routes } from 'react-router'
 
 import { About } from './components/About'
 import { AnecdoteList } from './components/AnecdoteList'
 import { CreateNew } from './components/CreateNew'
 import { Footer } from './components/Footer'
 import { Menu } from './components/Menu'
+import { Path } from './const/path'
 
 export const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -47,10 +49,17 @@ export const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+
       <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew onCreate={addNewAnecdote} />
+
+      <hr />
+
+      <Routes>
+        <Route path={Path.Anecdotes} element={<AnecdoteList anecdotes={anecdotes} />} />
+        <Route path={Path.About} element={<About />} />
+        <Route path={Path.CreateNew} element={<CreateNew onCreate={addNewAnecdote} />} />
+      </Routes>
+
       <Footer />
     </div>
   )
