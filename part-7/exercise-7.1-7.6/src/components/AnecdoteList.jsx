@@ -1,11 +1,20 @@
-export const AnecdoteList = ({ anecdotes }) => (
-  <main>
-    <h2>Anecdotes</h2>
+import { Link } from 'react-router'
+import { Path } from '../const/path'
 
-    <ul>
-      {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
-      ))}
-    </ul>
-  </main>
-)
+export const AnecdoteList = ({ anecdotes }) => {
+  const getAnecdoteUrl = (id) => Path.AnecdoteWithId.replace(':id', id)
+
+  return (
+    <main>
+      <h2>Anecdotes</h2>
+
+      <ul>
+        {anecdotes.map((anecdote) => (
+          <li key={anecdote.id}>
+            <Link to={getAnecdoteUrl(anecdote.id)}>{anecdote.content}</Link>
+          </li>
+        ))}
+      </ul>
+    </main>
+  )
+}

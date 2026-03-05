@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, useMatch } from 'react-router'
 
 import { About } from './components/About'
+import { Anecdote } from './components/Anecdote'
 import { AnecdoteList } from './components/AnecdoteList'
 import { CreateNew } from './components/CreateNew'
 import { Footer } from './components/Footer'
@@ -27,6 +28,10 @@ export const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+
+  const match = useMatch(Path.AnecdoteWithId)
+
+  const anecdote = match ? anecdotes.find((note) => note.id === Number(match.params.id)) : null
 
   const addNewAnecdote = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -55,6 +60,7 @@ export const App = () => {
       <hr />
 
       <Routes>
+        <Route path={Path.AnecdoteWithId} element={<Anecdote anecdote={anecdote} />} />
         <Route path={Path.Anecdotes} element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path={Path.About} element={<About />} />
         <Route path={Path.CreateNew} element={<CreateNew onCreate={addNewAnecdote} />} />
