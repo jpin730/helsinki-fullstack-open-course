@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Route, Routes, useMatch } from 'react-router'
+import { Route, Routes, useMatch, useNavigate } from 'react-router'
 
 import { About } from './components/About'
 import { Anecdote } from './components/Anecdote'
@@ -10,6 +10,8 @@ import { Menu } from './components/Menu'
 import { Path } from './const/path'
 
 export const App = () => {
+  const navigate = useNavigate()
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -29,26 +31,20 @@ export const App = () => {
 
   const [notification, setNotification] = useState('')
 
-  const match = useMatch(Path.AnecdoteWithId)
+  const anecdoteWithIdMatch = useMatch(Path.AnecdoteWithId)
 
-  const anecdote = match ? anecdotes.find((note) => note.id === Number(match.params.id)) : null
+  const anecdote = anecdoteWithIdMatch
+    ? anecdotes.find((note) => note.id === Number(anecdoteWithIdMatch.params.id))
+    : null
 
   const addNewAnecdote = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    navigate(Path.Anecdotes)
   }
 
-  const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
-
   const vote = (id) => {
-    const anecdote = anecdoteById(id)
-
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1,
-    }
-
-    setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)))
+    setAnecdotes(anecdotes.map((a) => (a.id === id ? { ...a, votes: a.votes + 1 } : a)))
   }
 
   return (
