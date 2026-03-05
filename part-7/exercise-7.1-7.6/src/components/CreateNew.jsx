@@ -1,9 +1,9 @@
 import { useField } from '../hooks/useField'
 
 export const CreateNew = ({ onCreate }) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const { reset: resetContent, ...content } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetInfo, ...info } = useField('text')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -15,11 +15,18 @@ export const CreateNew = ({ onCreate }) => {
     })
   }
 
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetContent()
+    resetAuthor()
+    resetInfo()
+  }
+
   return (
     <main>
       <h2>Create a new anecdote</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           <label>
             Content
@@ -42,7 +49,8 @@ export const CreateNew = ({ onCreate }) => {
         </div>
 
         <p>
-          <button>Create</button>
+          <button type="submit">Create</button>
+          <button type="reset">Reset</button>
         </p>
       </form>
     </main>
