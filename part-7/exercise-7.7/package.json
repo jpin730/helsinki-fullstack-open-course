@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "prepare": "cd ../.. && husky part-7/exercise-7.7/.husky"
   },
   "dependencies": {
     "axios": "^1.13.6",
@@ -12,7 +13,22 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
+    "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.22",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.2",
+    "prettier": "3.8.1",
     "vite": "^7.3.1"
+  },
+  "lint-staged": {
+    "*": "npx prettier --write --ignore-unknown",
+    "**/*.{js,jsx}": "npx eslint --fix"
   }
 }
