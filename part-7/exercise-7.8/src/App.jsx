@@ -2,21 +2,24 @@ import { useField } from './hooks/useField'
 import { useResource } from './hooks/useResource'
 
 export const App = () => {
-  const content = useField('text')
-  const name = useField('text')
-  const number = useField('text')
+  const { reset: contentReset, ...content } = useField('text')
+  const { reset: nameReset, ...name } = useField('text')
+  const { reset: numberReset, ...number } = useField('text')
 
   const [notes, noteService] = useResource('http://localhost:3005/notes')
   const [persons, personService] = useResource('http://localhost:3005/persons')
 
-  const handleNoteSubmit = (event) => {
+  const handleNoteSubmit = async (event) => {
     event.preventDefault()
-    noteService.create({ content: content.value })
+    await noteService.create({ content: content.value })
+    contentReset()
   }
 
-  const handlePersonSubmit = (event) => {
+  const handlePersonSubmit = async (event) => {
     event.preventDefault()
-    personService.create({ name: name.value, number: number.value })
+    await personService.create({ name: name.value, number: number.value })
+    nameReset()
+    numberReset()
   }
 
   return (
