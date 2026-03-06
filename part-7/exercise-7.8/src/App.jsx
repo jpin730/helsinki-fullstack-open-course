@@ -20,27 +20,44 @@ export const App = () => {
   }
 
   return (
-    <div>
-      <h2>notes</h2>
-      <form onSubmit={handleNoteSubmit}>
-        <input {...content} />
-        <button>create</button>
-      </form>
-      {notes.map((n) => (
-        <p key={n.id}>{n.content}</p>
-      ))}
+    <main>
+      <h2>Notes</h2>
 
-      <h2>persons</h2>
+      <form onSubmit={handleNoteSubmit}>
+        <div>
+          <label>
+            Content
+            <input {...content} />
+          </label>
+        </div>
+        <div>
+          <button>Create</button>
+        </div>
+      </form>
+
+      <ul>
+        {notes.map((n) => (
+          <li key={n.id}>{n.content}</li>
+        ))}
+      </ul>
+
+      <hr />
+
+      <h2>Persons</h2>
+
       <form onSubmit={handlePersonSubmit}>
         name <input {...name} /> <br />
         number <input {...number} />
-        <button>create</button>
+        <button>Create</button>
       </form>
-      {persons.map((n) => (
-        <p key={n.id}>
-          {n.name} {n.number}
-        </p>
-      ))}
-    </div>
+
+      <ul>
+        {persons.map((n) => (
+          <li key={n.id}>
+            {n.name} {n.number}
+          </li>
+        ))}
+      </ul>
+    </main>
   )
 }
