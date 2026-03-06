@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "server": " npx json-server --watch db.json --port 3005",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "cd ../.. && husky part-7/exercise-7.8/.husky"
   },
   "dependencies": {
     "axios": "^1.13.6",
@@ -20,9 +21,18 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
     "eslint": "^9.39.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
+    "husky": "^9.1.7",
     "json-server": "^0.17.4",
+    "lint-staged": "^16.3.2",
+    "prettier": "3.8.1",
     "vite": "^7.3.1"
+  },
+  "lint-staged": {
+    "*": "npx prettier --write --ignore-unknown",
+    "**/*.{js,jsx}": "npx eslint --fix"
   }
 }
