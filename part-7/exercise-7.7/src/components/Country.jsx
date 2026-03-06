@@ -1,18 +1,27 @@
 export const Country = ({ country }) => {
-  if (!country) {
-    return null
+  if (country == null) {
+    return <blockquote>Enter a country name to get information about it.</blockquote>
   }
 
   if (!country.found) {
-    return <div>not found...</div>
+    return <p>Country not found...</p>
   }
+
+  const { name, capital, population, flag } = country.data
 
   return (
     <div>
-      <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div>
-      <img src={country.data.flag} height="100" alt={`flag of ${country.data.name}`} />
+      <h3>{name} </h3>
+
+      <p>
+        <b>Capital:</b> {capital}
+      </p>
+
+      <p>
+        <b>Population:</b> {population}
+      </p>
+
+      <img src={flag} height="100" alt={`flag of ${name}`} />
     </div>
   )
 }

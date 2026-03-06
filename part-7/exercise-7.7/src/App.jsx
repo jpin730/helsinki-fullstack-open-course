@@ -13,17 +13,19 @@ export const App = () => {
 
   const fetch = (e) => {
     e.preventDefault()
-    setName(nameInput.value)
+    setName(nameInput.value.trim())
   }
 
   return (
-    <div>
+    <main>
       <form onSubmit={fetch}>
         <input {...nameInput} />
         <button>find</button>
       </form>
 
+      <hr />
+
       <Country country={country} />
-    </div>
+    </main>
   )
 }
