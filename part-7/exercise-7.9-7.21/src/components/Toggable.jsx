@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 
 import { TogglableContext } from '../contexts/TogglableContext'
 
-export const Togglable = ({ children, label }) => {
+export const Togglable = ({ children, label, labelVariant }) => {
   const [isVisible, setVisible] = useState(false)
 
   const toggleVisibility = () => setVisible(!isVisible)
@@ -17,7 +17,9 @@ export const Togglable = ({ children, label }) => {
   return (
     <TogglableContext.Provider value={{ toggleVisibility, cancelButton: <CancelButton /> }}>
       <div style={{ display: isVisible ? 'none' : '' }}>
-        <Button onClick={toggleVisibility}>{label}</Button>
+        <Button onClick={toggleVisibility} variant={labelVariant ?? 'secondary'}>
+          {label}
+        </Button>
       </div>
       <div style={{ display: isVisible ? '' : 'none' }}>{children}</div>
     </TogglableContext.Provider>

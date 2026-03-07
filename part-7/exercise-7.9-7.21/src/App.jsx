@@ -24,12 +24,12 @@ export const App = () => {
         <h1>Blogs App</h1>
         <Notification />
         {!user && (
-          <Togglable label="Login">
+          <Togglable label="Login" labelVariant="primary">
             <LoginForm login={login} />
           </Togglable>
         )}
         {user && (
-          <Togglable label="Create new blog">
+          <Togglable label="Create new blog" labelVariant="primary">
             <BlogForm />
           </Togglable>
         )}
