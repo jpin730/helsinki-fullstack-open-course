@@ -11,12 +11,14 @@ const userSlice = createSlice({
     setLoggedUser: (state, action) => ({ ...state, logged: action.payload }),
     logout: (state) => ({ ...state, logged: null }),
     setUsers: (state, action) => ({ ...state, list: action.payload }),
+    setCurrentUser: (state, action) => ({ ...state, current: action.payload }),
+    clearCurrentUser: (state) => ({ ...state, current: null }),
   },
 })
 
-export const { setLoggedUser, logout } = userSlice.actions
+export const { setLoggedUser, logout, clearCurrentUser } = userSlice.actions
 
-const { setUsers } = userSlice.actions
+const { setUsers, setCurrentUser } = userSlice.actions
 
 export const login =
   ({ username, password }) =>
@@ -28,6 +30,11 @@ export const login =
 export const initializeUsers = () => async (dispatch) => {
   const users = await usersService.getAll()
   dispatch(setUsers(users))
+}
+
+export const initializeUserById = (id) => async (dispatch) => {
+  const user = await usersService.getById(id)
+  dispatch(setCurrentUser(user))
 }
 
 export const userReducer = userSlice.reducer

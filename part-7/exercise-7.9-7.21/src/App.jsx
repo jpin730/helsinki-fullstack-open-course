@@ -7,6 +7,7 @@ import { LoginForm } from './components/LoginForm'
 import { Navigation } from './components/Navigation'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+import { User } from './components/User'
 import { Users } from './components/Users'
 import { Path } from './consts/Path'
 import { useUser } from './hooks/useUser'
@@ -41,6 +42,7 @@ export const App = () => {
           <Route path={Path.Blogs} element={<Blogs />} />
           <Route path={Path.BlogById} element={<Blog />} />
           <Route path={Path.Users} element={<Users />} />
+          <Route path={Path.UserById} element={<User />} />
         </Routes>
       </main>
     </>
