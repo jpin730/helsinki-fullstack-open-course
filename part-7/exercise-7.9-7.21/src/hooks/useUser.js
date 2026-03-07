@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { login as loginAction, logout as logoutAction, setUser } from './userReducer'
+import { login as loginAction, logout as logoutAction, setUser } from '../reducers/userReducer'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
 

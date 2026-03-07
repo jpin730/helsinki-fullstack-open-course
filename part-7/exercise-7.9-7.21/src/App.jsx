@@ -9,7 +9,7 @@ import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
 import { Users } from './components/Users'
 import { Path } from './consts/Path'
-import { useUser } from './reducers/useUser'
+import { useUser } from './hooks/useUser'
 
 export const App = () => {
   const { user, login, logout } = useUser()
