@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { Blog } from './components/Blog'
 import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+import { showNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
-const NOTIFICATION_TIME_SECONDS = 5
 
 export const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
 
-  const notificationTimeoutRef = useRef()
   const blogFormTogglableRef = useRef()
   const blogFormRef = useRef()
   const loginFormRef = useRef()
@@ -45,18 +46,8 @@ export const App = () => {
   )
 
   const notify = (message, isError = false) => {
-    if (notificationTimeoutRef.current) {
-      clearTimeout(notificationTimeoutRef.current)
-    }
-
     window.scrollTo({ top: 0, behavior: 'smooth' })
-
-    setNotification({ message, isError })
-
-    notificationTimeoutRef.current = setTimeout(() => {
-      setNotification(null)
-      notificationTimeoutRef.current = null
-    }, NOTIFICATION_TIME_SECONDS * 1000)
+    dispatch(showNotification(message, isError))
   }
 
   const notifyError = (message) => notify(message, true)
@@ -122,7 +113,7 @@ export const App = () => {
     <>
       <h1>Blogs</h1>
 
-      <Notification notification={notification} />
+      <Notification />
 
       {!user && (
         <Togglable label="Login">
