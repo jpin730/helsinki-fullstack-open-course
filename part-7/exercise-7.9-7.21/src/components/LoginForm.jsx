@@ -1,6 +1,6 @@
-import { useImperativeHandle, useState } from 'react'
+import { useState } from 'react'
 
-export const LoginForm = ({ ref, onLogin }) => {
+export const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -8,15 +8,6 @@ export const LoginForm = ({ ref, onLogin }) => {
     event.preventDefault()
     onLogin({ username, password })
   }
-
-  const reset = () => {
-    setUsername('')
-    setPassword('')
-  }
-
-  useImperativeHandle(ref, () => {
-    return { reset }
-  })
 
   return (
     <>

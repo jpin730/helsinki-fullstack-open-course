@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Blog } from './components/Blog'
@@ -8,7 +8,7 @@ import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
 import { createBlog, deleteBlogById, initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { showNotification } from './reducers/notificationReducer'
-import loginService from './services/login'
+import { login, logout, setUser } from './reducers/userReducer'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
 
@@ -16,23 +16,24 @@ export const App = () => {
   const dispatch = useDispatch()
 
   const blogs = useSelector((state) => state.blogs)
-
-  const [user, setUser] = useState(null)
+  const user = useSelector((state) => state.user)
 
   const blogFormTogglableRef = useRef()
   const blogFormRef = useRef()
-  const loginFormRef = useRef()
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  useEffect(function restoreUserSession() {
-    const storedUser = localStorage.getItem(LOGGED_USER_KEY)
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-  }, [])
+  useEffect(
+    function restoreUserSession() {
+      const storedUser = localStorage.getItem(LOGGED_USER_KEY)
+      if (storedUser) {
+        dispatch(setUser(JSON.parse(storedUser)))
+      }
+    },
+    [dispatch],
+  )
 
   useEffect(
     function syncUserToStorage() {
@@ -53,17 +54,15 @@ export const App = () => {
 
   const notifyError = (message) => notify(message, true)
 
-  const login = async ({ username, password }) => {
+  const handleLogin = async ({ username, password }) => {
     try {
-      const user = await loginService.login({ username, password })
-      loginFormRef.current.reset()
-      setUser(user)
+      await dispatch(login({ username, password }))
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Login failed')
     }
   }
 
-  const logout = () => setUser(null)
+  const handleLogout = () => dispatch(logout())
 
   const handleCreateBlog = async ({ title, author, url }) => {
     try {
@@ -110,7 +109,7 @@ export const App = () => {
 
       {!user && (
         <Togglable label="Login">
-          <LoginForm onLogin={login} ref={loginFormRef} />
+          <LoginForm onLogin={handleLogin} />
         </Togglable>
       )}
 
@@ -121,7 +120,7 @@ export const App = () => {
           </p>
 
           <p>
-            <button onClick={logout}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </p>
 
           <Togglable label="Create new blog" ref={blogFormTogglableRef}>
