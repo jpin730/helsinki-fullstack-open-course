@@ -1,0 +1,2 @@
+cd part-7/exercise-7.9-7.21
+npx lint-staged
