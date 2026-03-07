@@ -18,7 +18,7 @@ export const App = () => {
     <>
       <Navigation user={user} logout={logout} />
 
-      <h1>Blogs</h1>
+      <h1>Blogs App</h1>
 
       <Notification />
 
