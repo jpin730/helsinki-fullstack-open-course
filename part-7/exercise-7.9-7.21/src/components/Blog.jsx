@@ -16,7 +16,7 @@ export const Blog = () => {
   const navigate = useNavigate()
 
   const blog = useSelector((state) => state.blogs.current)
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user.logged)
 
   const { id } = useParams()
 

@@ -5,20 +5,20 @@ import loginService from '../services/login'
 
 const userSlice = createSlice({
   name: SliceName.User,
-  initialState: null,
+  initialState: { logged: null, list: [], current: null },
   reducers: {
-    setUser: (_, action) => action.payload,
-    logout: () => null,
+    setLoggedUser: (state, action) => ({ ...state, logged: action.payload }),
+    logout: (state) => ({ ...state, logged: null }),
   },
 })
 
-export const { setUser, logout } = userSlice.actions
+export const { setLoggedUser, logout } = userSlice.actions
 
 export const login =
   ({ username, password }) =>
   async (dispatch) => {
     const user = await loginService.login({ username, password })
-    dispatch(setUser(user))
+    dispatch(setLoggedUser(user))
   }
 
 export const userReducer = userSlice.reducer
