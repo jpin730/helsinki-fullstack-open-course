@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { SliceName } from '../const/SliceName'
+import { SliceName } from '../consts/SliceName'
 
 const notificationSlice = createSlice({
   name: SliceName.Notification,

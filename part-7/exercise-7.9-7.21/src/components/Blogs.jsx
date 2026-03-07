@@ -1,17 +1,30 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router'
 
+import { Path } from '../consts/Path'
 import { initializeBlogs } from '../reducers/blogReducer'
-import { Blog } from './Blog'
 
 export const Blogs = () => {
   const dispatch = useDispatch()
 
-  const blogs = useSelector((state) => state.blogs)
+  const blogs = useSelector((state) => state.blogs.list)
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  return blogs.map((blog) => <Blog key={blog.id} blog={blog} />)
+  const getTo = (blog) => Path.BlogById.replace(':id', blog.id)
+
+  return (
+    <ul>
+      {blogs.map((blog) => (
+        <li key={blog.id}>
+          <Link to={getTo(blog)}>
+            "{blog.title}" by {blog.author}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
 }

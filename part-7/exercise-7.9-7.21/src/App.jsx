@@ -1,9 +1,13 @@
+import { Route, Routes } from 'react-router'
+
+import { Blog } from './components/Blog'
 import { BlogForm } from './components/BlogForm'
 import { Blogs } from './components/Blogs'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
 import { UserSection } from './components/UserSection'
+import { Path } from './consts/Path'
 import { useUser } from './reducers/useUser'
 
 export const App = () => {
@@ -33,7 +37,10 @@ export const App = () => {
 
       <hr />
 
-      <Blogs />
+      <Routes>
+        <Route path={Path.Blogs} element={<Blogs />} />
+        <Route path={Path.BlogById} element={<Blog />} />
+      </Routes>
     </>
   )
 }

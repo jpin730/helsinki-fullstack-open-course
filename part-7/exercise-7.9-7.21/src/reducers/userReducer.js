@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { SliceName } from '../const/SliceName'
+import { SliceName } from '../consts/SliceName'
 import loginService from '../services/login'
 
 const userSlice = createSlice({
