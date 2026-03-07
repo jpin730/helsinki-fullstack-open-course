@@ -6,9 +6,8 @@ import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
-import { createBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
+import { createBlog, deleteBlogById, initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { showNotification } from './reducers/notificationReducer'
-import blogService from './services/blogs'
 import loginService from './services/login'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
@@ -66,9 +65,9 @@ export const App = () => {
 
   const logout = () => setUser(null)
 
-  const handleOnCreateBlog = async ({ title, author, url }) => {
+  const handleCreateBlog = async ({ title, author, url }) => {
     try {
-      const blog = await dispatch(createBlog({ title, author, url, token: user.token }))
+      const blog = await dispatch(createBlog({ title, author, url }, user.token))
       blogFormTogglableRef.current.toggleVisibility()
       blogFormRef.current.reset()
       notify(`Blog "${blog.title}" created successfully`)
@@ -88,18 +87,20 @@ export const App = () => {
       }
     }
 
-  const deleteBlog = async ({ id, title, author }) => {
-    if (!confirm(`Remove blog "${title}" by ${author || 'UNKNOWN'}?`)) {
-      return
-    }
+  const handleDeleteBlog =
+    ({ id, title, author }) =>
+    async () => {
+      if (!confirm(`Remove blog "${title}" by ${author || 'UNKNOWN'}?`)) {
+        return
+      }
 
-    try {
-      await blogService.deleteById(id, user.token)
-      notify(`Blog "${title}" deleted successfully`)
-    } catch (error) {
-      notifyError(error.response?.data?.error ?? 'Deleting blog failed')
+      try {
+        await dispatch(deleteBlogById(id, user.token))
+        notify(`Blog "${title}" deleted successfully`)
+      } catch (error) {
+        notifyError(error.response?.data?.error ?? 'Deleting blog failed')
+      }
     }
-  }
 
   return (
     <>
@@ -124,7 +125,7 @@ export const App = () => {
           </p>
 
           <Togglable label="Create new blog" ref={blogFormTogglableRef}>
-            <BlogForm onCreate={handleOnCreateBlog} ref={blogFormRef} />
+            <BlogForm onCreate={handleCreateBlog} ref={blogFormRef} />
           </Togglable>
         </>
       )}
@@ -137,7 +138,7 @@ export const App = () => {
           blog={blog}
           isOwner={blog.user?.username === user?.username}
           onLike={handleLikeBlog(blog)}
-          onDelete={() => deleteBlog(blog)}
+          onDelete={handleDeleteBlog(blog)}
         />
       ))}
     </>
