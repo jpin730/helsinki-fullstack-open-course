@@ -6,8 +6,7 @@ import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
-import { useNotification } from './hooks/useNotification'
-import { deleteBlogById, initializeBlogs, likeBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import { useUser } from './reducers/useUser'
 
 export const App = () => {
@@ -17,7 +16,6 @@ export const App = () => {
 
   const blogFormTogglableRef = useRef()
 
-  const { notify, notifyError } = useNotification()
   const { user, login, logout } = useUser()
 
   useEffect(() => {
@@ -25,32 +23,6 @@ export const App = () => {
   }, [dispatch])
 
   const onCreateBlog = () => blogFormTogglableRef.current.toggleVisibility()
-
-  const handleLikeBlog =
-    ({ id, user, likes, author, title, url }) =>
-    async () => {
-      try {
-        const blog = await dispatch(likeBlog({ id, user, likes, author, title, url }))
-        notify(`You liked "${blog.title}"`)
-      } catch (error) {
-        notifyError(error.response?.data?.error ?? 'Liking blog failed')
-      }
-    }
-
-  const handleDeleteBlog =
-    ({ id, title, author }) =>
-    async () => {
-      if (!confirm(`Remove blog "${title}" by ${author || 'UNKNOWN'}?`)) {
-        return
-      }
-
-      try {
-        await dispatch(deleteBlogById(id, user.token))
-        notify(`Blog "${title}" deleted successfully`)
-      } catch (error) {
-        notifyError(error.response?.data?.error ?? 'Deleting blog failed')
-      }
-    }
 
   return (
     <>
@@ -83,13 +55,7 @@ export const App = () => {
       <hr />
 
       {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          isOwner={blog.user?.username === user?.username}
-          onLike={handleLikeBlog(blog)}
-          onDelete={handleDeleteBlog(blog)}
-        />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </>
   )
