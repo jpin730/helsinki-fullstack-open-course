@@ -10,6 +10,8 @@ import {
   initializeBlogById,
   likeBlog,
 } from '../reducers/blogReducer'
+import { CommentForm } from './CommentForm'
+import { Togglable } from './Toggable'
 
 export const Blog = () => {
   const dispatch = useDispatch()
@@ -63,9 +65,9 @@ export const Blog = () => {
 
   return (
     <>
-      <h3>
+      <h2>
         "{blog.title}" by {blog.author}
-      </h3>
+      </h2>
 
       <p>
         <a href={blog.url} target="_blank" rel="noopener noreferrer">
@@ -84,6 +86,20 @@ export const Blog = () => {
           <button onClick={handleDelete(blog)}>remove</button>
         </p>
       )}
+
+      <hr />
+
+      <h3>Comments</h3>
+
+      <ul>
+        {blog.comments?.map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))}
+      </ul>
+
+      <Togglable label="Add a comment">
+        <CommentForm id={blog.id} />
+      </Togglable>
     </>
   )
 }

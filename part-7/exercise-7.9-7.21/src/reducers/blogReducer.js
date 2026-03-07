@@ -84,4 +84,12 @@ export const deleteBlogById = (id, token) => {
   }
 }
 
+export const addCommentToBlog = (id, comment) => {
+  return async (dispatch) => {
+    const updatedBlog = await blogService.addComment(id, comment)
+    dispatch(blogSlice.actions.updateBlog(updatedBlog))
+    return updatedBlog
+  }
+}
+
 export const blogReducer = blogSlice.reducer
