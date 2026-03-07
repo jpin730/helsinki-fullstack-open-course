@@ -12,6 +12,13 @@ Install the dependencies:
 npm install
 ```
 
+Start the backend development server:
+
+```bash
+cd ../../part-4/exercise-4.1-4.23
+npm run dev
+```
+
 Start the frontend development server:
 
 ```bash
