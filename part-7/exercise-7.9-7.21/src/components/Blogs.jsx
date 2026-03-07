@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { ListGroup } from 'react-bootstrap'
+import ListGroup from 'react-bootstrap/ListGroup'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router'
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 
 import { TogglableContext } from '../contexts/TogglableContext'
 

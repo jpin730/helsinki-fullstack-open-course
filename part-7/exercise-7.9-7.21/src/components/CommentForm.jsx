@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Button, Form, Stack } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Stack from 'react-bootstrap/Stack'
 import { useDispatch } from 'react-redux'
 
 import { useNotification } from '../hooks/useNotification'

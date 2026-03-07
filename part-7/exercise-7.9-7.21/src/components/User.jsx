@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Card, ListGroup } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import ListGroup from 'react-bootstrap/ListGroup'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 
