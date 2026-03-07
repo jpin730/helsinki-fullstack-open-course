@@ -25,14 +25,6 @@ export const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  const handleLogin = async ({ username, password }) => {
-    try {
-      await login({ username, password })
-    } catch (error) {
-      notifyError(error.response?.data?.error ?? 'Login failed')
-    }
-  }
-
   const handleCreateBlog = async ({ title, author, url }) => {
     try {
       const blog = await dispatch(createBlog({ title, author, url }, user.token))
@@ -78,7 +70,7 @@ export const App = () => {
 
       {!user && (
         <Togglable label="Login">
-          <LoginForm onLogin={handleLogin} />
+          <LoginForm login={login} />
         </Togglable>
       )}
 

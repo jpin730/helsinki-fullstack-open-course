@@ -1,12 +1,19 @@
 import { useState } from 'react'
+import { useNotification } from '../hooks/useNotification'
 
-export const LoginForm = ({ onLogin }) => {
+export const LoginForm = ({ login }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const { notifyError } = useNotification()
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    onLogin({ username, password })
+    try {
+      await login({ username, password })
+    } catch (error) {
+      notifyError(error.response?.data?.error ?? 'Login failed')
+    }
   }
 
   return (
