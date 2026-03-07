@@ -17,35 +17,32 @@ export const App = () => {
   const { user, login, logout } = useUser()
 
   return (
-    <Container className="max-width-720px">
+    <>
       <Navigation user={user} logout={logout} />
 
-      <h1>Blogs App</h1>
-
-      <Notification />
-
-      {!user && (
-        <Togglable label="Login">
-          <LoginForm login={login} />
-        </Togglable>
-      )}
-
-      {user && (
-        <Togglable label="Create new blog">
-          <BlogForm />
-        </Togglable>
-      )}
-
-      <hr />
-
-      <main>
-        <Routes>
-          <Route path={Path.Blogs} element={<Blogs />} />
-          <Route path={Path.BlogById} element={<Blog />} />
-          <Route path={Path.Users} element={<Users />} />
-          <Route path={Path.UserById} element={<User />} />
-        </Routes>
-      </main>
-    </Container>
+      <Container className="max-width-720px">
+        <h1>Blogs App</h1>
+        <Notification />
+        {!user && (
+          <Togglable label="Login">
+            <LoginForm login={login} />
+          </Togglable>
+        )}
+        {user && (
+          <Togglable label="Create new blog">
+            <BlogForm />
+          </Togglable>
+        )}
+        <hr />
+        <main>
+          <Routes>
+            <Route path={Path.Blogs} element={<Blogs />} />
+            <Route path={Path.BlogById} element={<Blog />} />
+            <Route path={Path.Users} element={<Users />} />
+            <Route path={Path.UserById} element={<User />} />
+          </Routes>
+        </main>
+      </Container>
+    </>
   )
 }

@@ -1,31 +1,41 @@
-import { NavLink } from 'react-router'
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { Link, NavLink } from 'react-router'
 
 import { Path } from '../consts/Path'
 
 export const Navigation = ({ user, logout }) => {
-  const getIsActiveStyle = ({ isActive }) => ({
-    fontWeight: isActive ? 'bold' : 'normal',
-  })
+  const getIsActiveClassName = ({ isActive }) => (isActive ? 'text-white fw-semibold' : '')
 
   return (
-    <nav>
-      <NavLink to={Path.Blogs} style={getIsActiveStyle}>
-        Blogs
-      </NavLink>
-      &nbsp;
-      <NavLink to={Path.Users} style={getIsActiveStyle}>
-        Users
-      </NavLink>
-      &nbsp;
-      {user && (
-        <>
-          <span>
-            <b>{user.name}</b> logged in
-          </span>
-          &nbsp;
-          <button onClick={logout}>Logout</button>
-        </>
-      )}
-    </nav>
+    <Navbar expand="sm" bg="primary" variant="dark" sticky="top">
+      <Container>
+        <Navbar.Brand as={Link} to={Path.Blogs}>
+          Blogs App
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse>
+          <Nav>
+            <Nav.Link as={NavLink} to={Path.Blogs} className={getIsActiveClassName}>
+              Blogs
+            </Nav.Link>
+            <Nav.Link as={NavLink} to={Path.Users} className={getIsActiveClassName}>
+              Users
+            </Nav.Link>
+            {user && (
+              <NavDropdown menuVariant="dark" className="d-block d-sm-none" title={user.name}>
+                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+              </NavDropdown>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+        {user && (
+          <Nav className="d-none d-sm-flex">
+            <NavDropdown title={user.name}>
+              <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        )}
+      </Container>
+    </Navbar>
   )
 }
