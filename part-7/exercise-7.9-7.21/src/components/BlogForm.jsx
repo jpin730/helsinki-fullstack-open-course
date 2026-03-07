@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, Form, Stack } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '../hooks/useNotification'
@@ -38,28 +39,39 @@ export const BlogForm = () => {
 
   return (
     <>
-      <h2>Create a new blog</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
+      <h2>Create new blog</h2>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>
             Title
-            <input type="text" value={title} onChange={({ target }) => setTitle(target.value)} />
-          </label>
-        </div>
-        <div>
-          <label>
+            <Form.Control
+              type="text"
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </Form.Label>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
             Author
-            <input type="text" value={author} onChange={({ target }) => setAuthor(target.value)} />
-          </label>
-        </div>
-        <div>
-          <label>
+            <Form.Control
+              type="text"
+              value={author}
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+          </Form.Label>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
             URL
-            <input type="url" value={url} onChange={({ target }) => setUrl(target.value)} />
-          </label>
-        </div>
-        <button type="submit">Create</button>
-      </form>
+            <Form.Control type="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+          </Form.Label>
+        </Form.Group>
+        <Stack direction="horizontal" gap={2}>
+          <Button type="submit">Create</Button>
+          {togglable.cancelButton}
+        </Stack>
+      </Form>
     </>
   )
 }

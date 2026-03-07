@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button } from 'react-bootstrap'
 
 import { TogglableContext } from '../contexts/TogglableContext'
 
@@ -7,17 +8,18 @@ export const Togglable = ({ children, label }) => {
 
   const toggleVisibility = () => setVisible(!isVisible)
 
+  const CancelButton = () => (
+    <Button onClick={toggleVisibility} variant="light">
+      Cancel
+    </Button>
+  )
+
   return (
-    <TogglableContext.Provider value={{ toggleVisibility }}>
-      <div>
-        <div style={{ display: isVisible ? 'none' : '' }}>
-          <button onClick={toggleVisibility}>{label}</button>
-        </div>
-        <div style={{ display: isVisible ? '' : 'none' }}>
-          {children}
-          <button onClick={toggleVisibility}>Cancel</button>
-        </div>
+    <TogglableContext.Provider value={{ toggleVisibility, cancelButton: <CancelButton /> }}>
+      <div style={{ display: isVisible ? 'none' : '' }}>
+        <Button onClick={toggleVisibility}>{label}</Button>
       </div>
+      <div style={{ display: isVisible ? '' : 'none' }}>{children}</div>
     </TogglableContext.Provider>
   )
 }

@@ -20,7 +20,7 @@ export const App = () => {
     <>
       <Navigation user={user} logout={logout} />
 
-      <Container className="max-width-720px">
+      <Container className="py-3">
         <h1>Blogs App</h1>
         <Notification />
         {!user && (
