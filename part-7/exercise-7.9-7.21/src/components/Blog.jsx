@@ -100,8 +100,8 @@ export const Blog = () => {
         <Card className="mb-3">
           <Card.Header>Comments</Card.Header>
           <ListGroup variant="flush">
-            {blog.comments.map((comment, index) => (
-              <ListGroup.Item key={index}>{comment}</ListGroup.Item>
+            {blog.comments.map((comment) => (
+              <ListGroup.Item key={comment}>{comment}</ListGroup.Item>
             ))}
           </ListGroup>
         </Card>
