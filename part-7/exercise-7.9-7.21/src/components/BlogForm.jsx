@@ -1,13 +1,30 @@
-import { useImperativeHandle, useState } from 'react'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-export const BlogForm = ({ ref, onCreate }) => {
+import { useNotification } from '../hooks/useNotification'
+import { createBlog } from '../reducers/blogReducer'
+
+export const BlogForm = ({ onCreate }) => {
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.user)
+
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const { notify, notifyError } = useNotification()
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    onCreate({ title, author, url })
+    try {
+      const blog = await dispatch(createBlog({ title, author, url }, user.token))
+      reset()
+      onCreate()
+      notify(`Blog "${blog.title}" created successfully`)
+    } catch (error) {
+      notifyError(error.response?.data?.error ?? 'Creating blog failed')
+    }
   }
 
   const reset = () => {
@@ -15,10 +32,6 @@ export const BlogForm = ({ ref, onCreate }) => {
     setAuthor('')
     setUrl('')
   }
-
-  useImperativeHandle(ref, () => {
-    return { reset }
-  })
 
   return (
     <>

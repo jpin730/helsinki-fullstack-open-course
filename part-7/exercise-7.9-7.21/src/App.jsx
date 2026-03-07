@@ -7,7 +7,7 @@ import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
 import { useNotification } from './hooks/useNotification'
-import { createBlog, deleteBlogById, initializeBlogs, likeBlog } from './reducers/blogReducer'
+import { deleteBlogById, initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { useUser } from './reducers/useUser'
 
 export const App = () => {
@@ -16,7 +16,6 @@ export const App = () => {
   const blogs = useSelector((state) => state.blogs)
 
   const blogFormTogglableRef = useRef()
-  const blogFormRef = useRef()
 
   const { notify, notifyError } = useNotification()
   const { user, login, logout } = useUser()
@@ -25,16 +24,7 @@ export const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  const handleCreateBlog = async ({ title, author, url }) => {
-    try {
-      const blog = await dispatch(createBlog({ title, author, url }, user.token))
-      blogFormTogglableRef.current.toggleVisibility()
-      blogFormRef.current.reset()
-      notify(`Blog "${blog.title}" created successfully`)
-    } catch (error) {
-      notifyError(error.response?.data?.error ?? 'Creating blog failed')
-    }
-  }
+  const onCreateBlog = () => blogFormTogglableRef.current.toggleVisibility()
 
   const handleLikeBlog =
     ({ id, user, likes, author, title, url }) =>
@@ -85,7 +75,7 @@ export const App = () => {
           </p>
 
           <Togglable label="Create new blog" ref={blogFormTogglableRef}>
-            <BlogForm onCreate={handleCreateBlog} ref={blogFormRef} />
+            <BlogForm onCreate={onCreateBlog} />
           </Togglable>
         </>
       )}
