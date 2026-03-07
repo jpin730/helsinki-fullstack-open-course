@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
@@ -20,7 +21,7 @@ export const Users = () => {
     <>
       <h2>Users</h2>
 
-      <table>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Name</th>
@@ -37,7 +38,7 @@ export const Users = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </>
   )
 }

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Card, ListGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 
@@ -27,13 +28,14 @@ export const User = () => {
     <>
       <h2>{user.name}</h2>
 
-      <h3>Added blogs</h3>
-
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
-        ))}
-      </ul>
+      <Card>
+        <Card.Header>Added blogs</Card.Header>
+        <ListGroup variant="flush">
+          {user.blogs.map((blog) => (
+            <ListGroup.Item key={blog.id}>{blog.title}</ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Card>
     </>
   )
 }
