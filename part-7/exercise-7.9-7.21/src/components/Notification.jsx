@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux'
+import { useNotification } from '../hooks/useNotification'
 
 export const Notification = () => {
-  const notification = useSelector((state) => state.notification)
+  const { notification } = useNotification()
 
   return (
     notification && (

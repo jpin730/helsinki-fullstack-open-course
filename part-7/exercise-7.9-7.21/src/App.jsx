@@ -6,8 +6,8 @@ import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+import { useNotification } from './hooks/useNotification'
 import { createBlog, deleteBlogById, initializeBlogs, likeBlog } from './reducers/blogReducer'
-import { showNotification } from './reducers/notificationReducer'
 import { login, logout, setUser } from './reducers/userReducer'
 
 const LOGGED_USER_KEY = 'loggedBlogAppUser'
@@ -20,6 +20,8 @@ export const App = () => {
 
   const blogFormTogglableRef = useRef()
   const blogFormRef = useRef()
+
+  const { notify, notifyError } = useNotification()
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -46,13 +48,6 @@ export const App = () => {
     },
     [user],
   )
-
-  const notify = (message, isError = false) => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    dispatch(showNotification(message, isError))
-  }
-
-  const notifyError = (message) => notify(message, true)
 
   const handleLogin = async ({ username, password }) => {
     try {
