@@ -1,11 +1,16 @@
 import { useState } from 'react'
+import { Button, Form, Stack } from 'react-bootstrap'
+
 import { useNotification } from '../hooks/useNotification'
+import { useTogglable } from '../hooks/useTogglable'
 
 export const LoginForm = ({ login }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const { notifyError } = useNotification()
+
+  const togglable = useTogglable()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -17,31 +22,31 @@ export const LoginForm = ({ login }) => {
   }
 
   return (
-    <>
-      <h2>Log in to application</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Username
-            <input
-              type="text"
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Password
-            <input
-              type="password"
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </label>
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Label>
+          Username
+          <Form.Control
+            type="text"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </Form.Label>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>
+          Password
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </Form.Label>
+      </Form.Group>
+      <Stack direction="horizontal" gap={2}>
+        <Button type="submit">Login</Button>
+        {togglable.cancelButton}
+      </Stack>
+    </Form>
   )
 }

@@ -38,40 +38,37 @@ export const BlogForm = () => {
   }
 
   return (
-    <>
-      <h2>Create new blog</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group>
-          <Form.Label>
-            Title
-            <Form.Control
-              type="text"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </Form.Label>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>
-            Author
-            <Form.Control
-              type="text"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </Form.Label>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>
-            URL
-            <Form.Control type="url" value={url} onChange={({ target }) => setUrl(target.value)} />
-          </Form.Label>
-        </Form.Group>
-        <Stack direction="horizontal" gap={2}>
-          <Button type="submit">Create</Button>
-          {togglable.cancelButton}
-        </Stack>
-      </Form>
-    </>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Label>
+          Title
+          <Form.Control
+            type="text"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </Form.Label>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>
+          Author
+          <Form.Control
+            type="text"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </Form.Label>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>
+          URL
+          <Form.Control type="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+        </Form.Label>
+      </Form.Group>
+      <Stack direction="horizontal" gap={2}>
+        <Button type="submit">Create</Button>
+        {togglable.cancelButton}
+      </Stack>
+    </Form>
   )
 }
