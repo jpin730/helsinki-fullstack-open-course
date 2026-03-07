@@ -1,3 +1,4 @@
+import { Container } from 'react-bootstrap'
 import { Route, Routes } from 'react-router'
 
 import { Blog } from './components/Blog'
@@ -16,7 +17,7 @@ export const App = () => {
   const { user, login, logout } = useUser()
 
   return (
-    <>
+    <Container className="max-width-720px">
       <Navigation user={user} logout={logout} />
 
       <h1>Blogs App</h1>
@@ -45,6 +46,6 @@ export const App = () => {
           <Route path={Path.UserById} element={<User />} />
         </Routes>
       </main>
-    </>
+    </Container>
   )
 }
