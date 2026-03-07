@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '../hooks/useNotification'
+import { useTogglable } from '../hooks/useTogglable'
 import { createBlog } from '../reducers/blogReducer'
 
-export const BlogForm = ({ onCreate }) => {
+export const BlogForm = () => {
   const dispatch = useDispatch()
 
   const user = useSelector((state) => state.user)
@@ -15,12 +16,14 @@ export const BlogForm = ({ onCreate }) => {
 
   const { notify, notifyError } = useNotification()
 
+  const togglable = useTogglable()
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
       const blog = await dispatch(createBlog({ title, author, url }, user.token))
       reset()
-      onCreate()
+      togglable.toggleVisibility()
       notify(`Blog "${blog.title}" created successfully`)
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Creating blog failed')

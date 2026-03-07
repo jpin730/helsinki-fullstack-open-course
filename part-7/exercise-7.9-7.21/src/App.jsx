@@ -1,5 +1,3 @@
-import { useRef } from 'react'
-
 import { BlogForm } from './components/BlogForm'
 import { Blogs } from './components/Blogs'
 import { LoginForm } from './components/LoginForm'
@@ -8,11 +6,7 @@ import { Togglable } from './components/Toggable'
 import { useUser } from './reducers/useUser'
 
 export const App = () => {
-  const blogFormTogglableRef = useRef()
-
   const { user, login, logout } = useUser()
-
-  const toggleBlogFormVisibility = () => blogFormTogglableRef.current.toggleVisibility()
 
   return (
     <>
@@ -36,8 +30,8 @@ export const App = () => {
             <button onClick={logout}>Logout</button>
           </p>
 
-          <Togglable label="Create new blog" ref={blogFormTogglableRef}>
-            <BlogForm onCreate={toggleBlogFormVisibility} />
+          <Togglable label="Create new blog">
+            <BlogForm />
           </Togglable>
         </>
       )}
