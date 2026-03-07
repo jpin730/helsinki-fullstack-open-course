@@ -3,6 +3,7 @@ import { Blogs } from './components/Blogs'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+import { UserSection } from './components/UserSection'
 import { useUser } from './reducers/useUser'
 
 export const App = () => {
@@ -22,13 +23,7 @@ export const App = () => {
 
       {user && (
         <>
-          <p>
-            <b>{user.name}</b> logged in
-          </p>
-
-          <p>
-            <button onClick={logout}>Logout</button>
-          </p>
+          <UserSection user={user} logout={logout} />
 
           <Togglable label="Create new blog">
             <BlogForm />
