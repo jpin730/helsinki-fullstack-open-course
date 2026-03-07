@@ -6,7 +6,7 @@ import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
-import { initializeBlogs } from './reducers/blogReducer'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
 import { showNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -66,9 +66,9 @@ export const App = () => {
 
   const logout = () => setUser(null)
 
-  const createBlog = async ({ title, author, url }) => {
+  const handleOnCreateBlog = async ({ title, author, url }) => {
     try {
-      const blog = await blogService.create({ title, author, url }, user.token)
+      const blog = await dispatch(createBlog({ title, author, url, token: user.token }))
       blogFormTogglableRef.current.toggleVisibility()
       blogFormRef.current.reset()
       notify(`Blog "${blog.title}" created successfully`)
@@ -127,7 +127,7 @@ export const App = () => {
           </p>
 
           <Togglable label="Create new blog" ref={blogFormTogglableRef}>
-            <BlogForm onCreate={createBlog} ref={blogFormRef} />
+            <BlogForm onCreate={handleOnCreateBlog} ref={blogFormRef} />
           </Togglable>
         </>
       )}
