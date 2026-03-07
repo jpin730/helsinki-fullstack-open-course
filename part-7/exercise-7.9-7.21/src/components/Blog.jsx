@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Button, Card, ListGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 
@@ -77,25 +78,32 @@ export const Blog = () => {
 
       <p>
         {blog.likes} likes &nbsp;
-        <button onClick={handleLike(blog)}>like</button>
+        <Button variant="light" onClick={handleLike(blog)}>
+          Like
+        </Button>
       </p>
 
       <p>{blog.user.name}</p>
       {isOwner && (
         <p>
-          <button onClick={handleDelete(blog)}>remove</button>
+          <Button variant="danger" onClick={handleDelete(blog)}>
+            Remove
+          </Button>
         </p>
       )}
 
       <hr />
 
-      <h3>Comments</h3>
-
-      <ul>
-        {blog.comments?.map((comment, index) => (
-          <li key={index}>{comment}</li>
-        ))}
-      </ul>
+      {blog.comments?.length > 0 && (
+        <Card className="mb-3">
+          <Card.Header>Comments</Card.Header>
+          <ListGroup variant="flush">
+            {blog.comments.map((comment, index) => (
+              <ListGroup.Item key={index}>{comment}</ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Card>
+      )}
 
       <Togglable label="Add a comment">
         <CommentForm id={blog.id} />

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, Form, Stack } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 
 import { useNotification } from '../hooks/useNotification'
@@ -31,21 +32,23 @@ export const CommentForm = ({ id }) => {
   }
 
   return (
-    <>
-      <h2>Add a comment</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Comment
-            <textarea
-              type="text"
-              value={comment}
-              onChange={({ target }) => setComment(target.value)}
-            ></textarea>
-          </label>
-        </div>
-        <button type="submit">Add Comment</button>
-      </form>
-    </>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Label>
+          Comment
+          <Form.Control
+            as="textarea"
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+          />
+        </Form.Label>
+      </Form.Group>
+      <Stack direction="horizontal" gap={2}>
+        <Button variant="secondary" type="submit">
+          Comment
+        </Button>
+        {togglable.cancelButton}
+      </Stack>
+    </Form>
   )
 }

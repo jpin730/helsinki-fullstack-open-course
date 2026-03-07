@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { ListGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
@@ -20,15 +21,13 @@ export const Blogs = () => {
     <>
       <h2>Blogs</h2>
 
-      <ul>
+      <ListGroup>
         {blogs.map((blog) => (
-          <li key={blog.id}>
-            <Link to={getTo(blog)}>
-              "{blog.title}" by {blog.author}
-            </Link>
-          </li>
+          <ListGroup.Item action as={Link} to={getTo(blog)} key={blog.id}>
+            "{blog.title}" by {blog.author}
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </>
   )
 }
