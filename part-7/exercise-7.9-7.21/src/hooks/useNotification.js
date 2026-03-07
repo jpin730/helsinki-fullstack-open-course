@@ -17,7 +17,6 @@ export const useNotification = () => {
       clearTimeout(timeoutIdRef.current)
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' }) // TODO: it'll be removed
     dispatch(setNotification({ message, isError }))
 
     timeoutIdRef.current = setTimeout(() => {
