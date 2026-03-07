@@ -1,14 +1,15 @@
+import { useContext } from 'react'
 import Toast from 'react-bootstrap/Toast'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { useDispatch } from 'react-redux'
 
-import { useNotification } from '../hooks/useNotification'
+import { NotificationContext } from '../contexts/NotificationContext'
 import { clearNotification } from '../reducers/notificationReducer'
 
 export const Notification = () => {
   const dispatch = useDispatch()
 
-  const { notification } = useNotification()
+  const { notification } = useContext(NotificationContext)
 
   const handleClose = () => {
     dispatch(clearNotification())

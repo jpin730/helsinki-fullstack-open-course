@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Stack from 'react-bootstrap/Stack'
 
-import { useNotification } from '../hooks/useNotification'
+import { NotificationContext } from '../contexts/NotificationContext'
 import { useTogglable } from '../hooks/useTogglable'
 
 export const LoginForm = ({ login }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const { notifyError } = useNotification()
+  const { notifyError } = useContext(NotificationContext)
 
   const togglable = useTogglable()
 

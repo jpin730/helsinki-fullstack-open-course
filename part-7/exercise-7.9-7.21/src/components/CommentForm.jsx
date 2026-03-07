@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Stack from 'react-bootstrap/Stack'
 import { useDispatch } from 'react-redux'
 
-import { useNotification } from '../hooks/useNotification'
+import { NotificationContext } from '../contexts/NotificationContext'
 import { useTogglable } from '../hooks/useTogglable'
 import { addCommentToBlog } from '../reducers/blogReducer'
 
@@ -13,7 +13,7 @@ export const CommentForm = ({ id }) => {
 
   const [comment, setComment] = useState('')
 
-  const { notify, notifyError } = useNotification()
+  const { notify, notifyError } = useContext(NotificationContext)
 
   const togglable = useTogglable()
 

@@ -11,13 +11,17 @@ import { Togglable } from './components/Toggable'
 import { User } from './components/User'
 import { Users } from './components/Users'
 import { Path } from './consts/Path'
+import { NotificationContext } from './contexts/NotificationContext'
+import { useNotification } from './hooks/useNotification'
 import { useUser } from './hooks/useUser'
 
 export const App = () => {
   const { user, login, logout } = useUser()
 
+  const { notification, notify, notifyError } = useNotification()
+
   return (
-    <>
+    <NotificationContext.Provider value={{ notification, notify, notifyError }}>
       <Navigation user={user} logout={logout} />
 
       <Container className="py-3">
@@ -43,6 +47,6 @@ export const App = () => {
           </Routes>
         </main>
       </Container>
-    </>
+    </NotificationContext.Provider>
   )
 }

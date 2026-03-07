@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Stack from 'react-bootstrap/Stack'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useNotification } from '../hooks/useNotification'
+import { NotificationContext } from '../contexts/NotificationContext'
 import { useTogglable } from '../hooks/useTogglable'
 import { createBlog } from '../reducers/blogReducer'
 
@@ -17,7 +17,7 @@ export const BlogForm = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const { notify, notifyError } = useNotification()
+  const { notify, notifyError } = useContext(NotificationContext)
 
   const togglable = useTogglable()
 

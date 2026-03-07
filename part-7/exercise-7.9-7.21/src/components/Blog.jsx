@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 
 import { Path } from '../consts/Path'
-import { useNotification } from '../hooks/useNotification'
+import { NotificationContext } from '../contexts/NotificationContext'
 import {
   clearCurrentBlog,
   deleteBlogById,
@@ -25,7 +25,7 @@ export const Blog = () => {
 
   const { id } = useParams()
 
-  const { notify, notifyError } = useNotification()
+  const { notify, notifyError } = useContext(NotificationContext)
 
   useEffect(() => {
     dispatch(initializeBlogById(id))
