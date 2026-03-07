@@ -1,28 +1,18 @@
-import { useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useRef } from 'react'
 
-import { Blog } from './components/Blog'
 import { BlogForm } from './components/BlogForm'
+import { Blogs } from './components/Blogs'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
-import { initializeBlogs } from './reducers/blogReducer'
 import { useUser } from './reducers/useUser'
 
 export const App = () => {
-  const dispatch = useDispatch()
-
-  const blogs = useSelector((state) => state.blogs)
-
   const blogFormTogglableRef = useRef()
 
   const { user, login, logout } = useUser()
 
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
-
-  const onCreateBlog = () => blogFormTogglableRef.current.toggleVisibility()
+  const toggleBlogFormVisibility = () => blogFormTogglableRef.current.toggleVisibility()
 
   return (
     <>
@@ -47,16 +37,14 @@ export const App = () => {
           </p>
 
           <Togglable label="Create new blog" ref={blogFormTogglableRef}>
-            <BlogForm onCreate={onCreateBlog} />
+            <BlogForm onCreate={toggleBlogFormVisibility} />
           </Togglable>
         </>
       )}
 
       <hr />
 
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      <Blogs />
     </>
   )
 }
