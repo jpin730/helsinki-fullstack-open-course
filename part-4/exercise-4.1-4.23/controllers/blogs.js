@@ -40,7 +40,7 @@ blogsRouter.put('/:id', async (request, response) => {
   }
 
   await updatedBlog.populate('user', { username: 1, name: 1 })
-  return response.status(HTTP_STATUS.NO_CONTENT).end()
+  return response.status(HTTP_STATUS.OK).json(updatedBlog)
 })
 
 blogsRouter.delete('/:id', userExtractor, async (request, response) => {

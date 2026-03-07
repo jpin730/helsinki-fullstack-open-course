@@ -6,7 +6,7 @@ import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
-import { createBlog, initializeBlogs } from './reducers/blogReducer'
+import { createBlog, initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { showNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -77,19 +77,16 @@ export const App = () => {
     }
   }
 
-  const likeBlog = async ({ id, user, likes, author, title, url }) => {
-    try {
-      await blogService.updateById(id, {
-        user: user.id,
-        likes: likes + 1,
-        author,
-        title,
-        url,
-      })
-    } catch (error) {
-      notifyError(error.response?.data?.error ?? 'Liking blog failed')
+  const handleLikeBlog =
+    ({ id, user, likes, author, title, url }) =>
+    async () => {
+      try {
+        const blog = await dispatch(likeBlog({ id, user, likes, author, title, url }))
+        notify(`You liked "${blog.title}"`)
+      } catch (error) {
+        notifyError(error.response?.data?.error ?? 'Liking blog failed')
+      }
     }
-  }
 
   const deleteBlog = async ({ id, title, author }) => {
     if (!confirm(`Remove blog "${title}" by ${author || 'UNKNOWN'}?`)) {
@@ -139,7 +136,7 @@ export const App = () => {
           key={blog.id}
           blog={blog}
           isOwner={blog.user?.username === user?.username}
-          onLike={() => likeBlog(blog)}
+          onLike={handleLikeBlog(blog)}
           onDelete={() => deleteBlog(blog)}
         />
       ))}
