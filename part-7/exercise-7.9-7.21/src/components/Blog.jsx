@@ -30,11 +30,11 @@ export const Blog = () => {
     }
   }, [dispatch, id])
 
-  if (blog == null || user == null) {
+  if (blog == null) {
     return null
   }
 
-  const isOwner = blog.user?.username === user.username
+  const isOwner = blog.user?.username === user?.username
 
   const handleLike = (blog) => async () => {
     try {
