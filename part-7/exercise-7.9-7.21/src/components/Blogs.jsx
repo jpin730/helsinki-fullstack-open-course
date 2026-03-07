@@ -17,14 +17,18 @@ export const Blogs = () => {
   const getTo = (blog) => Path.BlogById.replace(':id', blog.id)
 
   return (
-    <ul>
-      {blogs.map((blog) => (
-        <li key={blog.id}>
-          <Link to={getTo(blog)}>
-            "{blog.title}" by {blog.author}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <>
+      <h2>Blogs</h2>
+
+      <ul>
+        {blogs.map((blog) => (
+          <li key={blog.id}>
+            <Link to={getTo(blog)}>
+              "{blog.title}" by {blog.author}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }

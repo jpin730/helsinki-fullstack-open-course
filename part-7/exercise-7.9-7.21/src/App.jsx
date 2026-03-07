@@ -7,6 +7,7 @@ import { LoginForm } from './components/LoginForm'
 import { Navigation } from './components/Navigation'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+import { Users } from './components/Users'
 import { Path } from './consts/Path'
 import { useUser } from './reducers/useUser'
 
@@ -35,10 +36,13 @@ export const App = () => {
 
       <hr />
 
-      <Routes>
-        <Route path={Path.Blogs} element={<Blogs />} />
-        <Route path={Path.BlogById} element={<Blog />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path={Path.Blogs} element={<Blogs />} />
+          <Route path={Path.BlogById} element={<Blog />} />
+          <Route path={Path.Users} element={<Users />} />
+        </Routes>
+      </main>
     </>
   )
 }

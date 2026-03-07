@@ -62,7 +62,7 @@ export const Blog = () => {
     }
 
   return (
-    <article>
+    <>
       <h3>
         "{blog.title}" by {blog.author}
       </h3>
@@ -84,6 +84,6 @@ export const Blog = () => {
           <button onClick={handleDelete(blog)}>remove</button>
         </p>
       )}
-    </article>
+    </>
   )
 }
