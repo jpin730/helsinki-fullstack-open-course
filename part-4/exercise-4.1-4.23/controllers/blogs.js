@@ -69,4 +69,24 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   return response.status(HTTP_STATUS.NO_CONTENT).end()
 })
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+  if (!comment) {
+    return response.status(HTTP_STATUS.BAD_REQUEST).json({ error: 'comment is required' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(HTTP_STATUS.NOT_FOUND).end()
+  }
+
+  const comments = blog.comments ?? []
+  blog.comments = [...comments, comment]
+  const updatedBlog = await blog.save()
+
+  await updatedBlog.populate('user', { username: 1, name: 1 })
+
+  return response.status(HTTP_STATUS.CREATED).json(updatedBlog)
+})
+
 module.exports = blogsRouter
