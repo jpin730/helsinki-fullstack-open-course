@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Blog } from './components/Blog'
 import { BlogForm } from './components/BlogForm'
 import { LoginForm } from './components/LoginForm'
 import { Notification } from './components/Notification'
 import { Togglable } from './components/Toggable'
+import { initializeBlogs } from './reducers/blogReducer'
 import { showNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -15,16 +16,17 @@ const LOGGED_USER_KEY = 'loggedBlogAppUser'
 export const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector((state) => state.blogs)
+
   const [user, setUser] = useState(null)
 
   const blogFormTogglableRef = useRef()
   const blogFormRef = useRef()
   const loginFormRef = useRef()
 
-  useEffect(function fetchBlogs() {
-    blogService.getAll().then((blogs) => setBlogs(blogs.toSorted((a, b) => b.likes - a.likes)))
-  }, [])
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(function restoreUserSession() {
     const storedUser = localStorage.getItem(LOGGED_USER_KEY)
@@ -70,7 +72,6 @@ export const App = () => {
       blogFormTogglableRef.current.toggleVisibility()
       blogFormRef.current.reset()
       notify(`Blog "${blog.title}" created successfully`)
-      setBlogs(blogs.concat(blog).toSorted((a, b) => b.likes - a.likes))
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Creating blog failed')
     }
@@ -85,11 +86,6 @@ export const App = () => {
         title,
         url,
       })
-      setBlogs(
-        blogs
-          .map((b) => (b.id === id ? { ...b, likes: b.likes + 1 } : b))
-          .toSorted((a, b) => b.likes - a.likes),
-      )
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Liking blog failed')
     }
@@ -103,7 +99,6 @@ export const App = () => {
     try {
       await blogService.deleteById(id, user.token)
       notify(`Blog "${title}" deleted successfully`)
-      setBlogs(blogs.filter((b) => b.id !== id))
     } catch (error) {
       notifyError(error.response?.data?.error ?? 'Deleting blog failed')
     }
