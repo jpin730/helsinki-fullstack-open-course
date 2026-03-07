@@ -10,6 +10,14 @@ blogsRouter.get('/', async (_, response) => {
   return response.json(blogs)
 })
 
+blogsRouter.get('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
+  if (!blog) {
+    return response.status(HTTP_STATUS.NOT_FOUND).end()
+  }
+  return response.json(blog)
+})
+
 blogsRouter.post('/', userExtractor, async (request, response) => {
   const user = request.user
 
